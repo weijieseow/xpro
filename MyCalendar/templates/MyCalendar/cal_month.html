@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MyCalendar</title>
-</head>
-<body>
 
-</body>
-</html>
+{% extends 'MyCalendar/navbar.html' %}
+
+{% block body %}
+    {% load cal_tag %}
+    {% month_cal %} {# current month and year #}
+    <table class="cal_month_calendar">
+        <tr>
+            {% for day in headers %}
+            <th>{{ day|date:"D"|slice:":2" }}</th>
+            {% endfor %}
+        </tr>
+
+        {% for week in calendar %}
+        <tr>
+            {% for day in week %}
+                <td {% if not day.in_month %} class="cal_not_in_month"{% endif %}>
+                    {% if day.event %}
+                        <a href="/calender/{{ day.day|date:"Y/m" }}/"> {{ day.day|date:"j" }}</a>
+                    {% else %} {{ day.day|date:"j" }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

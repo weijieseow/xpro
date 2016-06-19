@@ -13,6 +13,6 @@ class Event(models.Model):
 
     # recurrence?
 
-    def __str__(self):
+    def __self__(self):
         return self.event_name
 

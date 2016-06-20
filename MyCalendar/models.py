@@ -12,7 +12,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
 
 
-    def __self__(self):
+    def __str__(self):
         return self.event_name
 
     #find out how to get this working

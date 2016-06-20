@@ -1,27 +1,31 @@
-
 {% extends 'MyCalendar/navbar.html' %}
 
 {% block body %}
-    {% load cal_tag %}
-    {% month_cal %} {# current month and year #}
-    <table class="cal_month_calendar">
-        <tr>
-            {% for day in headers %}
-            <th>{{ day|date:"D"|slice:":2" }}</th>
-            {% endfor %}
-        </tr>
 
-        {% for week in calendar %}
+{% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
+
+    <h1>Calendar</h1>
+    <table width="100%">
         <tr>
-            {% for day in week %}
-                <td {% if not day.in_month %} class="cal_not_in_month"{% endif %}>
-                    {% if day.event %}
-                        <a href="/calender/{{ day.day|date:"Y/m" }}/"> {{ day.day|date:"j" }}</a>
-                    {% else %} {{ day.day|date:"j" }}
-                    {% endif %}
-                </td>
-            {% endfor %}
+            <td width="20%" align="left">
+              &lt;&lt; <a href="/calendar/{{PreviousYear}}/{{PreviousMonth}}/">{{PreviousMonthName}} {{PreviousYear}}</a>
+            </td>
+            <td width="20%" align="left">
+              &lt;&lt; <a href="/calendar/{{YearBeforeThis}}/{{Month}}/">{{MonthName}} {{YearBeforeThis}}</a>
+            </td>
+            <td width="20%" align="center"><a href="/calendar">Today</a></td>
+            <td width="20%" align="right">
+              <a href="/calendar/{{YearAfterThis}}/{{Month}}/">{{MonthName}} {{YearAfterThis}}</a> &gt;&gt;
+            </td>
+            <td width="20%" align="right">
+              <a href="/calendar/{{NextYear}}/{{NextMonth}}/">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;
+            </td>
         </tr>
-        {% endfor %}
     </table>
+
+    <div id="calendar">
+      {{Calendar}}
+    </div>
+
 {% endblock %}

@@ -1,18 +1,20 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils.timezone import now
+from datetime import date, timedelta
 
 class Event(models.Model):
     event_name = models.CharField(max_length = 255)
-    # we may need to come up with a way to do choices for date and time
-    from_date_and_time = models.DateTimeField(verbose_name= 'Start', default= now())
-    to_date_and_time = models.DateTimeField(verbose_name='End', help_text= 'Please set end time to later than start time.')
-    description = models.TextField()
+    start_date = models.DateField(null=True, default=date.today())
+    start_time = models.TimeField(null=True, default=date.today())
+    end_date = models.DateField(null=True, default=date.today())
+    end_time = models.TimeField(null=True, default=date.today() + timedelta(minutes=30))
+    description = models.TextField(blank=True)
 
-
-    # recurrence?
 
     def __self__(self):
         return self.event_name
 
+    #find out how to get this working
+    #def get_absolute_url(self):
+    #    return ('event', (), {'event_id': self.pk})

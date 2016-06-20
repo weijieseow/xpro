@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>MyCalendar</title>
-</head>
-<body>
+{% extends 'MyCalendar/navbar.html' %}
 
-</body>
-</html>
+{% block body %}
+
+{% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
+
+    <h1>Calendar</h1>
+    <table width="100%">
+        <tr>
+            <td width="20%" align="left">
+              &lt;&lt; <a href="/calendar/{{PreviousYear}}/{{PreviousMonth}}/" style="color:black">{{PreviousMonthName}} {{PreviousYear}}</a>
+            </td>
+            <td width="20%" align="left">
+              &lt;&lt; <a href="/calendar/{{YearBeforeThis}}/{{Month}}/" style="color:black">{{MonthName}} {{YearBeforeThis}}</a>
+            </td>
+            <td width="20%" align="center"><a href="/calendar" style="color:black">Today</a></td>
+            <td width="20%" align="right">
+              <a href="/calendar/{{YearAfterThis}}/{{Month}}/" style="color:black">{{MonthName}} {{YearAfterThis}}</a> &gt;&gt;
+            </td>
+            <td width="20%" align="right">
+              <a href="/calendar/{{NextYear}}/{{NextMonth}}/" style="color:black">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;
+            </td>
+        </tr>
+    </table>
+
+    <div id="calendar">
+      {{Calendar}}
+    </div>
+
+{% endblock %}

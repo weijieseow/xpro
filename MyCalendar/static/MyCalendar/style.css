@@ -5,13 +5,13 @@
 #calendar table tr th {
     text-align: center;
     font-size: 16px;
-    background-color: #316497;
-    color: #99ccff;
+    background-color: #888888;
+    color: white;
 }
 
 #calendar table tr td {
     width: 10%;
-    border: 1px solid #555;
+    border: 1px solid #000000;
     vertical-align: top;
     height: 120px;
     padding: 2px;

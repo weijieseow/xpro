@@ -4,15 +4,18 @@ from . import views
 app_name = 'MyCalendar'
 
 urlpatterns = [
-    # /calendar/
+    # /MyCalendar/
     url(r'^$', views.calendarView, name='calendar'),
 
-    # /calendar/event/#pk
+    # /MyCalendar/event/#pk
     #url(r'^event/(?P<event_id>[0-9]+)/$', views.EventView.as_view(), name="event"),
 
-    # /calendar/task/#pk
+    # /MyCalendar/task/#pk
     # url(r'^task/(?P<task_id>[0-9]+)/$', views,TaskView.as_view(), name="task"),
 
-    # /calendar/aboutus
+    # /MyCalendar/AboutUs
     url(r'^AboutUs/$', views.aboutUsView, name="aboutus"),
+
+    # /MyCalendar/register
+    url(r'^register/$', views.registerView, name='register'),
 ]

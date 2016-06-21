@@ -2,7 +2,7 @@ from django.views import generic
 from .models import Event, UserProfile
 from .forms import UserForm, UserProfileForm
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
 from datetime import date, datetime
@@ -11,8 +11,8 @@ from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 
 #class EventView(generic.ListView):
 #    template_name = 'MyCalendar/Event.html'
@@ -70,15 +70,18 @@ def home(request):
     lToday = datetime.now()
     return calendar(request, lToday.year, lToday.month)
 
-def calendarView(request, year=now().year, month=now().month):
+def calendarView(request, year=None, month=None):
     """
     Show calendar of events for specified month and year
     """
     if request.user.is_authenticated():
         username = request.user.username
     else:
-        return HttpResponseRedirect('login')
+        return redirect('MyCalendar:login')
 
+    if year == None and month == None:
+        year = now().year
+        month = now().month
 
     lYear = int(year)
     lMonth = int(month)
@@ -179,8 +182,8 @@ def loginView(request):
     if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-        username = form.POST['username']
-        password = form.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
@@ -195,7 +198,7 @@ def loginView(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return HttpResponseRedirect('calendar')
+                return redirect('MyCalendar:calendar')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your X-Pro account is disabled.")
@@ -214,4 +217,4 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     # Redirect to a success page.
-    return render(request, 'MyCalendar/login.html', {})
+    return render(request, 'MyCalendar/login.html')

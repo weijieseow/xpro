@@ -1,6 +1,7 @@
 from django.views import generic
-from .models import Event
+from .models import Event, UserProfile
 from .forms import UserForm, UserProfileForm
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
@@ -9,9 +10,9 @@ from itertools import groupby
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange
-from django.template import RequestContext
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 #class EventView(generic.ListView):
 #    template_name = 'MyCalendar/Event.html'
@@ -73,6 +74,12 @@ def calendarView(request, year=now().year, month=now().month):
     """
     Show calendar of events for specified month and year
     """
+    if request.user.is_authenticated():
+        username = request.user.username
+    else:
+        return HttpResponseRedirect('login')
+
+
     lYear = int(year)
     lMonth = int(month)
     lCalendarFromMonth = datetime(lYear, lMonth, 1)
@@ -104,6 +111,7 @@ def calendarView(request, year=now().year, month=now().month):
                                                        'NextYear' : lNextYear,
                                                        'YearBeforeThis' : lYearBeforeThis,
                                                        'YearAfterThis' : lYearAfterThis,
+                                                       'username' : username,
                                                    })
 
 def registerView(request):
@@ -150,7 +158,7 @@ def registerView(request):
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print user_form.errors, profile_form.errors
+            print(user_form.errors, profile_form.errors)
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -163,6 +171,7 @@ def registerView(request):
             request, 'MyCalendar/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
+
 def loginView(request):
     # Like before, obtain the context for the user's request.
 
@@ -170,8 +179,8 @@ def loginView(request):
     if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
-        username = request.POST['username']
-        password = request.POST['password']
+        username = form.POST['username']
+        password = form.POST['password']
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
@@ -180,19 +189,19 @@ def loginView(request):
         # If we have a User object, the details are correct.
         # If None (Python's way of representing the absence of a value), no user
         # with matching credentials was found.
-        if user:
+        if user is not None:
             # Is the account active? It could have been disabled.
             if user.is_active:
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return HttpResponseRedirect('/MyCalendar/')
+                return HttpResponseRedirect('calendar')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your X-Pro account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
-            print "Invalid login details: {0}, {1}".format(username, password)
+            print("Invalid login details: {0}, {1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
@@ -201,3 +210,8 @@ def loginView(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
         return render(request, 'MyCalendar/login.html')
+
+def logoutView(request):
+    logout(request)
+    # Redirect to a success page.
+    return render(request, 'MyCalendar/login.html', {})

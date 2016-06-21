@@ -17,6 +17,7 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
 
+
 class Event(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     event_name = models.CharField(max_length = 255)

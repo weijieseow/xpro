@@ -18,4 +18,7 @@ urlpatterns = [
 
     # /MyCalendar/register
     url(r'^register/$', views.registerView, name='register'),
+
+    # /MyCalendar/login
+    url(r'^login/$', views.loginView, name='login'),
 ]

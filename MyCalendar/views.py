@@ -1,6 +1,6 @@
 from django.views import generic
 from .models import Event, UserProfile
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, EventCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
@@ -14,8 +14,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 
 
-#class EventView(generic.ListView):
-#    template_name = 'MyCalendar/Event.html'
+def EventCreateView(request):
+    form = EventCreateForm()
+    return render(request, 'MyCalendar/EventCreate.html', {'form':form})
+
 
 def aboutUsView(request):
     return render(request, 'MyCalendar/AboutUs.html')

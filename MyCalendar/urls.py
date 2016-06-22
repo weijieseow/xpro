@@ -6,7 +6,7 @@ app_name = 'MyCalendar'
 
 urlpatterns = [
     # /MyCalendar/
-    url(r'^$', views.calendarView, name='calendar'),
+    url(r'^/$', views.calendarView, name='calendar'),
 
     # /MyCalendar/event/#pk
     #url(r'^event/(?P<event_id>[0-9]+)/$', views.EventView.as_view(), name="event"),
@@ -23,5 +23,9 @@ urlpatterns = [
     # /MyCalendar/login
     url(r'^login/$', views.loginView, name='login'),
 
+    # logout
     url(r'^login/$', views.logoutView, name='logout'),
+
+    # /MyCalendar/EventCreate
+    url(r'^EventCreate/$', views.EventCreateView, name='eventcreate'),
 ]

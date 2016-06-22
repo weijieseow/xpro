@@ -1,5 +1,5 @@
 from django.views import generic
-from .models import Event, UserProfile
+from .models import Event
 from .forms import UserForm, UserProfileForm, EventCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -15,12 +15,32 @@ from django.http import HttpResponse
 
 
 def EventCreateView(request):
-    form = EventCreateForm()
-    return render(request, 'MyCalendar/EventCreate.html', {'form':form})
+    if request.method == "POST":
+        event = EventCreateForm(data=request.POST)
+        if event.is_valid():
+            if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
+                return HttpResponse('The end date must be later than the start date.')
+            elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
+                    and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
+                return HttpResponse('The end time must be later than the start time.')
+            event_without_user = event.save(commit=False)
+            event_without_user.user = request.user
+            event.save()
+
+            return redirect('MyCalendar:calendar')
+        else:
+            errors = event.errors
+            return HttpResponse(errors.items())
+#we really need more error checking. at the moment, end date earlier than start date is allowed.
+
+    else:
+        form = EventCreateForm()
+        return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
 def aboutUsView(request):
     return render(request, 'MyCalendar/AboutUs.html')
+
 
 class EventCalendar(HTMLCalendar):
 
@@ -89,7 +109,8 @@ def calendarView(request, year=None, month=None):
     lMonth = int(month)
     lCalendarFromMonth = datetime(lYear, lMonth, 1)
     lCalendarToMonth = datetime(lYear, lMonth, monthrange(lYear, lMonth)[1])
-    MonthlyEvents = Event.objects.filter(start_date__gte=lCalendarFromMonth, start_date__lte=lCalendarToMonth)
+    MonthlyEvents = Event.objects.filter(start_date__gte=lCalendarFromMonth, start_date__lte=lCalendarToMonth,
+                                         user__username__exact=username)
     lCalendar = EventCalendar(MonthlyEvents).formatmonth(lYear, lMonth)
     lPreviousYear = lYear
     lPreviousMonth = lMonth - 1

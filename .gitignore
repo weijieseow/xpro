@@ -37,6 +37,9 @@ GitHub.sublime-settings
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+.idea/xpro.iml
+.idea/misc.xml
+
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids

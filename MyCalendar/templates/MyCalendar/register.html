@@ -4,21 +4,24 @@
         <title>Registration page</title>
     </head>
 
-    <body>
+    <body style="background-color:lightgray">
         <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
-        <div class="container-fluid">
-        <h1>Register with X-Pro</h1>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
 
-            <div class="small">
+        <div class="container-fluid" style="color:grey">
+        <h1 style="color:dimgray">Register with X-Pro</h1>
+
+            <div class="jumbotron" id="register">
                 {% if registered %}
                 <strong>thank you for registering!</strong>
                 <a href="{% url 'MyCalendar:calendar' %}">Return to the homepage.</a><br />
                 {% else %}
 
-                <form id="user_form" method="POST" action="{% url 'MyCalendar:register' %}">
+                <form id="user_form" method="POST" action="{% url 'MyCalendar:register' %}" enctype="multipart/form-data">
 
                     {% csrf_token %}
 
@@ -26,7 +29,7 @@
                          (<p>) element. This ensures each element appears on a new line,
                          making everything look neater. -->
                     {{ user_form.as_p }}
-                    {{ profile_form.as_p }}
+
 
                     <!-- Provide a button to click to submit the form. -->
                     <input type="submit" name="submit" value="Register" />

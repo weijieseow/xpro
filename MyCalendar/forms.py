@@ -3,6 +3,8 @@ from .models import UserProfile, Event
 from django import forms
 
 class UserForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs=dict(required=True, max_length=30)), label=("Username"), error_messages={ 'invalid': ("This value must contain only letters, numbers and underscores.") })
+    email = forms.EmailField(widget=forms.TextInput(attrs=dict(required=True, max_length=30)), label=("Email address"))
     password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:

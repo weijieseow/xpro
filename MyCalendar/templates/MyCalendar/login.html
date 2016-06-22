@@ -8,23 +8,28 @@
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
 
-    <body>
+    <body style="background-color:lightgrey">
         <div class="container-fluid">
-        <h1>Welcome to X-Pro</h1>
+        <h1 style="color:dimgrey">Welcome to X-Pro</h1>
 
-            <div class="lead">
+            <div class="jumbotron">
                 <form id="login_form" method="post" action="">
                     {% csrf_token %}
-                    Username: <input type="text" name="username" value="" size="50" />
-                    <br>
-                    Password: <input type="password" name="password" value="" size="50" />
-                    <br>
-
+                    <span style="color:grey">
+                        Username: <input type="text" name="username" value="" size="50" />
+                        <br>
+                        <br>
+                        Password: &nbsp<input type="password" name="password" value="" size="50" />
+                        <br>
+                        <br>
+                     </span>
                     <input type="submit" value="login" />
                 </form>
                 <br>
-                <p>No account?</p>
+                <p style="font-size:small; color:grey">No account?</p>
                 <a href="{% url 'MyCalendar:register' %}">Register Here!</a><br>
             </div>
         </div>

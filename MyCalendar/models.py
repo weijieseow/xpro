@@ -4,7 +4,7 @@ from django.db import models
 from datetime import date, timedelta
 from django.contrib.auth.models import User
 
-'''
+
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User)
@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
         return self.user.username
-'''
+
 
 class Event(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)

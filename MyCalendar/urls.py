@@ -8,6 +8,9 @@ urlpatterns = [
     # /MyCalendar/
     url(r'^/$', views.calendarView, name='calendar'),
 
+    # /MyCalendar/calendar
+    url(r'^calendar/([0-9]{4})/([0-9]+)/$', views.calendarView, name='calendar'),
+
     # /MyCalendar/event/#pk
     #url(r'^event/(?P<event_id>[0-9]+)/$', views.EventView.as_view(), name="event"),
 

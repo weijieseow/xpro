@@ -7,11 +7,12 @@
 <body>
 
 <h1>New Event</h1>
-    <form method="post" class="post-form">
+    <form id="event_create_form" method="POST">
         {% csrf_token %}
 
         {{ form.as_p }}
-        <button type="submit" class="save btn btn-default"><a href="{% url 'MyCalendar:calendar' %}">Create</a></button>
+
+        <input type="submit" name="submit" value="Submit" />
     </form>
 
 </body>

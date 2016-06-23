@@ -21,7 +21,11 @@
                 <a href="{% url 'MyCalendar:calendar' %}">Return to the homepage.</a><br />
                 {% else %}
 
+<<<<<<< HEAD
                 <form id="user_form" method="POST" action="{% url 'MyCalendar:register' %}" enctype="multipart/form-data">
+=======
+                <form id="user_form" method="POST">
+>>>>>>> 9702f0e788fba37d11a5caab862df15da9894d4c
 
                     {% csrf_token %}
 

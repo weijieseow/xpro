@@ -25,7 +25,7 @@ class EventCreateForm(forms.ModelForm):
         model = Event
         fields = ('event_name', 'start_date', 'start_time', 'end_date', 'end_time', 'description')
         widgets = {'start_date': forms.SelectDateWidget, 'start_time': SelectTimeWidget,
-                   'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget}
+                   'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget, 'class':'form-control'}
 
 
 class TaskCreateForm(forms.ModelForm):

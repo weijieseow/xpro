@@ -7,19 +7,36 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
-    <button type = "button" class = "btn btn-default btn-sm">
-        <a href="{% url 'MyCalendar:taskcreate' %}" style="color:grey">New Task</a>
-    </button>
+    <div class="container-fluid">
+        <button type = "button" class = "btn btn-default btn-lg">
+            <a href="{% url 'MyCalendar:taskcreate' %}" style="color:grey">New Task</a>
+        </button>
 
-    {% if user_tasks %}
-    <h1> You have {{ number_of_tasks }} number of tasks.</h1>
-    <u1>
-        {% for task in user_tasks %}
-            <li>task</li>
-        {% endfor %}
-    </u1>
-    {% else %}
-        <h3> You don't have any outstanding task. Hooray! </h3>
-    {% endif %}
+        {% if user_tasks %}
+        <h1> You have
+            {% if number_of_tasks > 1 %}
+                {{ number_of_tasks }} tasks.
+            {% elif number_of_tasks == 1 %}
+                {{ number_of_tasks }} task.
+            {% endif %}
+        </h1>
+        <ol>
+            {% for task in user_tasks %}
+                <div class="well well-sm">
+                    <h4>{{ task }}</h4>
+                    <br>
+                    <button type = "button" class = "btn btn-default btn-sm">
+                        <a href="#" style="color:grey">Update</a>
+                    </button>
+                    <button type = "button" class = "btn btn-default btn-sm">
+                        <a href="#" style="color:grey">Delete</a>
+                    </button>
+                </div>
+            {% endfor %}
+        </ol>
+        {% else %}
+            <h3> You don't have any outstanding task. Hooray! </h3>
+        {% endif %}
+    </div>
 
 {% endblock %}

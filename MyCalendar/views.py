@@ -54,9 +54,9 @@ def eventEditView(request):
 def tasksListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user)
-    number_of_tasks = len(user_tasks)
+    number_of_tasks = user_tasks.count()
     return render(request, 'MyCalendar/TasksView.html',
-                  {'user_tasks': user_tasks}, {'number_of_tasks': number_of_tasks})
+                  {'user_tasks': user_tasks, 'number_of_tasks': number_of_tasks})
 
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
@@ -262,7 +262,7 @@ def loginView(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return redirect('MyCalendar:calendar')
+                return redirect('MyCalendar:taskslist')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your X-Pro account is disabled.")

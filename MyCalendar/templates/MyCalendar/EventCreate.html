@@ -6,13 +6,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
+    {% load formstyle %}
+
+    <div class="container-fluid">
     <h1>New Event</h1>
-    <form id="event_create_form" method="POST">
-        {% csrf_token %}
+        <form class="form-group" id="event_create_form" method="POST">
+            {% csrf_token %}
 
-        {{ form.as_p }}
+            {{ form.as_p }}
 
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+            <input type="submit" name="submit" value="Submit" />
+        </form>
+    </div>
 
 {% endblock %}

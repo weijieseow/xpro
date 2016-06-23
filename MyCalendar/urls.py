@@ -30,7 +30,10 @@ urlpatterns = [
     url(r'^logout/$', views.logoutView, name='logout'),
 
     # /MyCalendar/EventCreate
-    url(r'^EventCreate/$', views.EventCreateView, name='eventcreate'),
+    url(r'^EventCreate/$', views.eventCreateView, name='eventcreate'),
 
     url(r'^login/$', auth_views.login),
+
+    # /MyCalendar/TaskList
+    url(r'^TaskList/$', views.tasksListView, name='taskslist')
 ]

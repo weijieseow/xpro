@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This is the Task Create page.</title>
+</head>
+<body>
+
+<h1>New task</h1>
+    <form id="task_create_form" method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+
+</body>
+</html

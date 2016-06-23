@@ -281,4 +281,4 @@ def loginView(request):
 def logoutView(request):
     logout(request)
     # Redirect to a success page.
-    return render(request, 'MyCalendar/login.html')
+    return render(request, 'MyCalendar/successlogout.html')

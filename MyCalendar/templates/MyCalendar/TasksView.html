@@ -1,0 +1,16 @@
+{% extends 'MyCalendar/navbar.html' %}
+
+{% block body %}
+
+    {% if user_tasks %}
+    <h1> You have {{ number_of_tasks }} number of tasks.</h1>
+    <u1>
+        {% for task in user_tasks %}
+            <li>task</li>
+        {% endfor %}
+    </u1>
+    {% else %}
+        <h3> You don't have any task. Hooray! </h3>
+    {% endif %}
+
+{% endblock %}

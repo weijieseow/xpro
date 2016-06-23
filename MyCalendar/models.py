@@ -36,11 +36,16 @@ class Event(models.Model):
 
 
 class Task(models.Model):
-    task_list = models.ForeignKey('TaskList', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=255)
     task_date = models.DateField(null=True, default=date.today())
+    description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.task_name
+
+'''
 class TaskList(models.Model):
-    pass
     #maybe we can use a list?
-    #user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+'''

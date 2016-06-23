@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import UserProfile, Event
+from .models import UserProfile, Event, Task
 from django import forms
 from.custom_widgets import SelectTimeWidget
 
@@ -28,3 +28,8 @@ class EventCreateForm(forms.ModelForm):
                    'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget}
 
 
+class TaskCreateForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('task_name', 'task_date', 'description')
+        widgets = {'task_date': forms.SelectDateWidget}

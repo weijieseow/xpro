@@ -1,6 +1,6 @@
 from django.views import generic
-from .models import Event
-from .forms import UserForm, UserProfileForm, EventCreateForm
+from .models import Event, Task
+from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils.safestring import mark_safe
@@ -16,11 +16,11 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url=('MyCalendar:login'))
-def EventView(request):
+def eventView(request):
     return render(request,'MyCalender:')
 
 @login_required(login_url=('MyCalendar:login'))
-def EventCreateView(request):
+def eventCreateView(request):
     if request.method == "POST":
         event = EventCreateForm(data=request.POST)
         if event.is_valid():
@@ -29,6 +29,7 @@ def EventCreateView(request):
             elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
                     and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
                 return HttpResponse('The end time must be later than the start time.')
+
             event_without_user = event.save(commit=False)
             event_without_user.user = request.user
             event.save()
@@ -44,8 +45,36 @@ def EventCreateView(request):
         return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
-def EventEditView(request):
+def eventEditView(request):
      pass
+
+
+
+@login_required(login_url=('MyCalendar:login'))
+def tasksListView(request):
+    user = request.user
+    user_tasks = Task.objects.filter(user__exact=user)
+    number_of_tasks = len(user_tasks)
+    return render(request, 'MyCalendar/TasksView.html',
+                  {'user_tasks': user_tasks}, {'number_of_tasks': number_of_tasks})
+
+@login_required(login_url=('MyCalendar:login'))
+def taskCreateView(request):
+    if request.method == "POST":
+        task = TaskCreateForm(data=request.POST)
+        if task.is_valid():
+            task_without_user = task.save(commit=False)
+            task_without_user.user = request.user
+            task.save()
+
+            return redirect('MyCalendar:calendar')
+        else:
+            errors = task.errors
+            return HttpResponse(errors.items())
+    else:
+        form = TaskCreateForm()
+        return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
+
 
 
 @login_required(login_url=('MyCalendar:login'))

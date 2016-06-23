@@ -41,6 +41,8 @@ class Task(models.Model):
     task_date = models.DateField(null=True, default=date.today())
     description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.task_name
 
 '''
 class TaskList(models.Model):

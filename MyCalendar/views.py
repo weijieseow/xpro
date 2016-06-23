@@ -14,6 +14,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 
 
+def EventView(request):
+    return render(request,'MyCalender:')
+
 def EventCreateView(request):
     if request.method == "POST":
         event = EventCreateForm(data=request.POST)
@@ -31,11 +34,16 @@ def EventCreateView(request):
         else:
             errors = event.errors
             return HttpResponse(errors.items())
-#we really need more error checking. at the moment, end date earlier than start date is allowed.
+#we really need more error checking. at the moment, the end date time thing is kinda handled i guess.
 
     else:
         form = EventCreateForm()
         return render(request, 'MyCalendar/EventCreate.html', {'form': form})
+
+
+def EventEditView(request):
+    event =
+
 
 
 def aboutUsView(request):

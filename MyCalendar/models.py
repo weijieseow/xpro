@@ -19,7 +19,7 @@ class UserProfile(models.Model):
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event_name = models.CharField(max_length = 255)
+    event_name = models.CharField(max_length=255)
     start_date = models.DateField(null=True, default=date.today())
     start_time = models.TimeField(null=True)
     end_date = models.DateField(null=True, default=date.today(),
@@ -33,3 +33,13 @@ class Event(models.Model):
     #find out how to get this working
     #def get_absolute_url(self):
     #    return ('event', (), {'event_id': self.pk})
+
+
+class Task(models.Model):
+    task_list = models.ForeignKey(TaskList,on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=255)
+    task_date = models.DateField(null=True, default=date.today())
+
+class TaskList(models.Model):
+    #maybe we can use a list?
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

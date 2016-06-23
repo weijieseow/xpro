@@ -22,7 +22,7 @@
 }
 
 #calendar td.filled {
-    background-color: #99ccff;
+    background-color: lightgray;
 }
 
 #calendar td.today {
@@ -36,4 +36,12 @@
 
 #calendar a {
     font-size: 10px;
+}
+
+#register {
+    text-align: left;
+}
+
+#user_form {
+    font-size: small;
 }

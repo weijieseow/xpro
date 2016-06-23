@@ -27,8 +27,10 @@ urlpatterns = [
     url(r'^login/$', views.loginView, name='login'),
 
     # logout
-    url(r'^login/$', views.logoutView, name='logout'),
+    url(r'^logout/$', views.logoutView, name='logout'),
 
     # /MyCalendar/EventCreate
     url(r'^EventCreate/$', views.EventCreateView, name='eventcreate'),
+
+    url(r'^login/$', auth_views.login),
 ]

@@ -4,30 +4,33 @@
 
 {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
+    <div class="container-fluid">
+        <p>Hello {{ username }}</p>
+        <table width="100%">
+            <tr>
+                <td width="20%" align="left">
+                  &lt;&lt; <a href="/MyCalendar/calendar/{{YearBeforeThis}}/{{Month}}/" style="color:grey">{{MonthName}} {{YearBeforeThis}}</a>
+                </td>
 
-    <h1 class="float-left">Hello {{ username }}</h1>
+                <td width="20%" align="left">
+                  &lt;&lt; <a href="/MyCalendar/calendar/{{PreviousYear}}/{{PreviousMonth}}/" style="color:grey">{{PreviousMonthName}} {{PreviousYear}}</a>
+                </td>
 
-    <h1 class="text-center">Calendar</h1>
-    <table width="100%">
-        <tr>
-            <td width="20%" align="left">
-              &lt;&lt; <a href="/MyCalendar/calendar/{{PreviousYear}}/{{PreviousMonth}}/">{{PreviousMonthName}} {{PreviousYear}}</a>
-            </td>
-            <td width="20%" align="left">
-              &lt;&lt; <a href="/MyCalendar/calendar/{{YearBeforeThis}}/{{Month}}/" style="color:black">{{MonthName}} {{YearBeforeThis}}</a>
-            </td>
-            <td width="20%" align="center"><a href="{% url 'MyCalendar:calendar' %}">Today</a></td>
-            <td width="20%" align="right">
-              <a href="/MyCalendar/calendar/{{YearAfterThis}}/{{Month}}/" style="color:black">{{MonthName}} {{YearAfterThis}}</a> &gt;&gt;
-            </td>
-            <td width="20%" align="right">
-              <a href="/MyCalendar/calendar/{{NextYear}}/{{NextMonth}}/" style="color:black">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;
-            </td>
-        </tr>
-    </table>
+                <td width="20%" align="center"><a href="{% url 'MyCalendar:calendar' %}" style="color:dimgray">Today</a></td>
 
-    <div id="calendar">
-      {{Calendar}}
+                <td width="20%" align="right">
+                  <a href="/MyCalendar/calendar/{{NextYear}}/{{NextMonth}}/" style="color:grey">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;
+                </td>
+
+                <td width="20%" align="right">
+                  <a href="/MyCalendar/calendar/{{YearAfterThis}}/{{Month}}/" style="color:grey">{{MonthName}} {{YearAfterThis}}</a> &gt;&gt;
+                </td>
+            </tr>
+        </table>
+
+        <div id="calendar">
+          {{Calendar}}
+        </div>
     </div>
 
 {% endblock %}

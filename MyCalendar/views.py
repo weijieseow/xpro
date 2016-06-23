@@ -12,11 +12,14 @@ from django.utils.html import conditional_escape as esc
 from calendar import monthrange
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
+@login_required(login_url=('MyCalendar:login'))
 def EventView(request):
     return render(request,'MyCalender:')
 
+@login_required(login_url=('MyCalendar:login'))
 def EventCreateView(request):
     if request.method == "POST":
         event = EventCreateForm(data=request.POST)
@@ -42,10 +45,10 @@ def EventCreateView(request):
 
 
 def EventEditView(request):
-    event =
+     pass
 
 
-
+@login_required(login_url=('MyCalendar:login'))
 def aboutUsView(request):
     return render(request, 'MyCalendar/AboutUs.html')
 
@@ -100,6 +103,7 @@ def home(request):
     lToday = datetime.now()
     return calendar(request, lToday.year, lToday.month)
 
+@login_required(login_url=('MyCalendar:login'))
 def calendarView(request, year=None, month=None):
     """
     Show calendar of events for specified month and year

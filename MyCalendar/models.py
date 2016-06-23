@@ -36,7 +36,7 @@ class Event(models.Model):
 
 
 class Task(models.Model):
-    task_list = models.ForeignKey(TaskList,on_delete=models.CASCADE)
+    task_list = models.ForeignKey('TaskList', on_delete=models.CASCADE)
     task_name = models.CharField(max_length=255)
     task_date = models.DateField(null=True, default=date.today())
 

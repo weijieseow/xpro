@@ -19,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 def EventView(request):
     return render(request,'MyCalender:')
 
+@login_required(login_url=('MyCalendar:login'))
 def EventCreateView(request):
     if request.method == "POST":
         event = EventCreateForm(data=request.POST)
@@ -44,7 +45,7 @@ def EventCreateView(request):
 
 
 def EventEditView(request):
-    event =
+     pass
 
 
 @login_required(login_url=('MyCalendar:login'))

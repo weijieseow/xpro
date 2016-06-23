@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
+    <button type = "button" class = "btn btn-default btn-sm">
+        <a href="{% url 'MyCalendar:taskcreate' %}" style="color:grey">New Task</a>
+    </button>
+
     {% if user_tasks %}
     <h1> You have {{ number_of_tasks }} number of tasks.</h1>
     <u1>
@@ -15,7 +19,7 @@
         {% endfor %}
     </u1>
     {% else %}
-        <h3> You don't have any task. Hooray! </h3>
+        <h3> You don't have any outstanding task. Hooray! </h3>
     {% endif %}
 
 {% endblock %}

@@ -6,7 +6,7 @@ app_name = 'MyCalendar'
 
 urlpatterns = [
     # /MyCalendar/
-    url(r'^/$', views.calendarView, name='calendar'),
+    url(r'^$', views.calendarView, name='calendar'),
 
     # /MyCalendar/calendar
     url(r'^calendar/([0-9]{4})/([0-9]+)/$', views.calendarView, name='calendar'),

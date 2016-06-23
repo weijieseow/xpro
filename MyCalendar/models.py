@@ -41,5 +41,6 @@ class Task(models.Model):
     task_date = models.DateField(null=True, default=date.today())
 
 class TaskList(models.Model):
+    pass
     #maybe we can use a list?
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)

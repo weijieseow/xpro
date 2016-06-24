@@ -25,11 +25,12 @@ class EventCreateForm(forms.ModelForm):
         model = Event
         fields = ['event_name', 'start_date', 'start_time', 'end_date', 'end_time', 'description']
         widgets = {'start_date': forms.SelectDateWidget, 'start_time': SelectTimeWidget,
-                   'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget, 'class':'form-control'}
+                   'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget, 'class':'form-control',
+                   'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}
 
 
 class TaskCreateForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['task_name', 'task_date', 'description']
-        widgets = {'task_date': forms.SelectDateWidget}
+        widgets = {'task_date': forms.SelectDateWidget, 'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}

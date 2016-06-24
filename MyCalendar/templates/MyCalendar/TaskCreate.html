@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
-    <h1>New task</h1>
-    <form id="task_create_form" method="POST">
-        {% csrf_token %}
+    <div class="container-fluid">
+        <h1>New task</h1>
+        <form id="task_create_form" method="POST">
+            {% csrf_token %}
 
-        {{ form.as_p }}
+            {{ form.as_p }}
 
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+        </form>
+    </div>
 
 {% endblock %}

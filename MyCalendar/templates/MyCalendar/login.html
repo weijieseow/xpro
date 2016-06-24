@@ -13,11 +13,18 @@
 
     <body style="background-color:lightgrey">
         <div class="container-fluid">
-        <h1 style="color:dimgrey">Welcome to X-Pro</h1>
+            <h1 style="color:dimgrey">Welcome to X-Pro</h1>
 
             <div class="jumbotron">
                 <form class="form-group" id="login_form" method="post" action="">
                 <div class="lead">
+
+                    {% if user is None  %}
+                        <p><strong>
+                            <span style="font-size:small; color:grey">Wrong username or password. Please try again.</span>
+                        </strong></p>
+                    {% endif %}
+
                     <form id="login_form" method="POST">
                         {% csrf_token %}
                         <span style="color:grey">

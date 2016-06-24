@@ -1,0 +1,20 @@
+{% extends 'MyCalendar/navbar.html' %}
+
+{% block body %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+
+    <h1>Update Event</h1>
+    <form id="event_update_form" method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" name="update" value="Update" />
+    </form>
+
+    <a href="{% url 'MyCalendar:delete' %}" > Delete</a>
+
+{% endblock %}

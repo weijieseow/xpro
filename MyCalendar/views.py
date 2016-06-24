@@ -1,8 +1,8 @@
-from django.views import generic
+from django.views.generic import edit
 from .models import Event, Task
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
 from datetime import date, datetime
@@ -13,7 +13,8 @@ from calendar import monthrange
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-
+from django.utils.decorators import method_decorator
+from django.core.urlresolvers import reverse_lazy
 
 @login_required(login_url=('MyCalendar:login'))
 def eventView(request):
@@ -45,9 +46,18 @@ def eventCreateView(request):
         return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
-def eventEditView(request):
-     pass
 
+@method_decorator(login_required, name='dispatch')
+class eventUpdateView(edit.UpdateView):
+    model = Event
+    form_class = EventCreateForm
+    template_name_suffix = '_update_form'
+
+#give up on this for awhile
+@method_decorator(login_required, name='dispatch')
+class eventDeleteView(edit.DeleteView):
+    model = Event
+    template_name_suffix = '_delete'
 
 
 @login_required(login_url=('MyCalendar:login'))
@@ -67,7 +77,7 @@ def taskCreateView(request):
             task_without_user.user = request.user
             task.save()
 
-            return redirect('MyCalendar:calendar')
+            return redirect('MyCalendar:taskslist')
         else:
             errors = task.errors
             return HttpResponse(errors.items())
@@ -98,7 +108,7 @@ class EventCalendar(HTMLCalendar):
                 body = ['<ul>']
                 for event in self.events[day]:
                     body.append('<li>')
-                    #body.append('<a href="%s">' % event.get_absolute_url())
+                    body.append('<a href="%s">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
                     body.append('</li>')
                 body.append('</ul>')

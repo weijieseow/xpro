@@ -59,6 +59,7 @@ class eventUpdateView(edit.UpdateView):
 class eventDeleteView(edit.DeleteView):
     model = Event
     template_name_suffix = '_delete'
+    success_url = reverse_lazy('MyCalendar:calendar')
 
 
 @login_required(login_url=('MyCalendar:login'))

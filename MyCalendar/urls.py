@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^event/(?P<pk>[0-9]+)/$', views.eventUpdateView.as_view(), name="eventupdate"),
 
     # /MyCalendar/event/delete
-    #url(r'^event/(?P<pk>[0-9]+)/delete/$', views.eventDeleteView.as_view(), name="eventdelete"),
+    url(r'^event/(?P<pk>[0-9]+)/delete/$', views.eventDeleteView.as_view(), name="eventdelete"),
 
     # /MyCalendar/task/#pk
     # url(r'^task/(?P<task_id>[0-9]+)/$', views,TaskView.as_view(), name="task"),

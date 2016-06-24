@@ -30,9 +30,8 @@ class Event(models.Model):
     def __str__(self):
         return self.event_name
 
-    #find out how to get this working
-    #def get_absolute_url(self):
-    #    return ('event', (), {'event_id': self.pk})
+    def get_absolute_url(self):
+        return "/MyCalendar/event/%i/" % self.pk
 
 
 class Task(models.Model):

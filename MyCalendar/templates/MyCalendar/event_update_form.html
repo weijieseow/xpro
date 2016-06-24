@@ -1,25 +1,20 @@
 {% extends 'MyCalendar/navbar.html' %}
 
 {% block body %}
-
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
-    <button type = "button" class = "btn btn-default btn-sm">
-        <a href="{% url 'MyCalendar:taskcreate' %}" style="color:grey">New Task</a>
-    </button>
+    <h1>Update Event</h1>
+    <form id="event_update_form" method="POST">
+        {% csrf_token %}
 
-    {% if user_tasks %}
-    <h1> You have {{ number_of_tasks }} number of tasks.</h1>
-    <u1>
-        {% for task in user_tasks %}
-            <li>{{task}}</li>
-        {% endfor %}
-    </u1>
-    {% else %}
-        <h3> You don't have any outstanding task. Hooray! </h3>
-    {% endif %}
+        {{ form.as_p }}
+
+        <input type="submit" name="update" value="Update" />
+    </form>
+
+    <a href="{% url 'MyCalendar:delete' %}" > Delete</a>
 
 {% endblock %}

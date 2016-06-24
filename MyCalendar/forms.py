@@ -10,20 +10,20 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
-        exclude = ('first_name', 'last_name')
+        fields = ['username', 'email', 'password']
+        exclude = ['first_name', 'last_name']
 
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ('bio',)
+        exclude = ['bio']
 
 
 class EventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('event_name', 'start_date', 'start_time', 'end_date', 'end_time', 'description')
+        fields = ['event_name', 'start_date', 'start_time', 'end_date', 'end_time', 'description']
         widgets = {'start_date': forms.SelectDateWidget, 'start_time': SelectTimeWidget,
                    'end_date': forms.SelectDateWidget, 'end_time': SelectTimeWidget}
 
@@ -31,5 +31,5 @@ class EventCreateForm(forms.ModelForm):
 class TaskCreateForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ('task_name', 'task_date', 'description')
+        fields = ['task_name', 'task_date', 'description']
         widgets = {'task_date': forms.SelectDateWidget}

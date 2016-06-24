@@ -18,7 +18,7 @@
             <div class="jumbotron" id="register">
                 {% if registered %}
                 <strong>thank you for registering!</strong>
-                <a href="{% url 'MyCalendar:calendar' %}">Return to the homepage.</a><br />
+                <a href="{% url 'MyCalendar:taskslist' %}">Return to the homepage.</a><br />
                 {% else %}
 
                 <form id="user_form" method="POST" action="{% url 'MyCalendar:register' %}" enctype="multipart/form-data">

@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <title>Logged out</title>
 </head>
-<body>
-    <h1>You have successfully logged out of X-Pro</h1>
-    <a href="{% url 'MyCalendar:login' %}">Back to login</a>
+
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
+
+<body style="background-color:lightgray">
+    <div class="container-fluid">
+        <h1 style="color:dimgrey">We hope to see you again!</h1>
+            <div class="jumbotron" style="color:grey">
+                <p><strong>You have successfully logged out of X-Pro</strong></p>
+                <a href="{% url 'MyCalendar:login' %}">Back to login</a>
+            </div>
+    </div>
 </body>
 </html>

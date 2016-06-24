@@ -18,7 +18,7 @@ from django.core.urlresolvers import reverse_lazy
 
 @login_required(login_url=('MyCalendar:login'))
 def eventView(request):
-    return render(request,'MyCalender:')
+    return render(request,'MyCalendar/cal_month.html')
 
 @login_required(login_url=('MyCalendar:login'))
 def eventCreateView(request):
@@ -53,6 +53,7 @@ class eventUpdateView(edit.UpdateView):
     form_class = EventCreateForm
     success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
+
 
 #give up on this for awhile
 @method_decorator(login_required, name='dispatch')

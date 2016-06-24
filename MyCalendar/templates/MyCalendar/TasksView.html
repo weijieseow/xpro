@@ -10,10 +10,7 @@
     <div class="container-fluid">
 
     <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-success">New Task</a>
-
-        <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-default">New Task</a>
-
-
+    
         {% if user_tasks %}
         <h1> You have
             {% if number_of_tasks > 1 %}

@@ -51,6 +51,7 @@ def eventCreateView(request):
 class eventUpdateView(edit.UpdateView):
     model = Event
     form_class = EventCreateForm
+    success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
 
 #give up on this for awhile

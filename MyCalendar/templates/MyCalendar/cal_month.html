@@ -6,7 +6,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
     <div class="container-fluid">
         <p>Hello {{ username }}</p>
+
         <a href="{% url 'MyCalendar:eventcreate' %}" class="btn btn-success">New Event</a>
+
+        <a href="{% url 'MyCalendar:eventcreate' %}" class="btn btn-default">New Event</a>
+
 
         <table width="100%">
             <tr>

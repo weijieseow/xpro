@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
     <div class="container-fluid">
+
     <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-success">New Task</a>
+
+        <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-default">New Task</a>
+
 
         {% if user_tasks %}
         <h1> You have

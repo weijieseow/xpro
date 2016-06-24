@@ -15,10 +15,6 @@
         <input type="submit" name="update" value="Update">
     </form>
 
-
-     {#<a href="{% url 'MyCalendar:delete' %}" > Delete</a> #}
-
-
     <a href="{% url 'MyCalendar:eventdelete' object.pk %}" class="btn btn-default">Delete</a>
 
 {% endblock %}

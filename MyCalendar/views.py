@@ -15,6 +15,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
+from django.http import Http404
+
 
 @login_required(login_url=('MyCalendar:login'))
 def eventView(request):
@@ -53,6 +55,15 @@ class eventUpdateView(edit.UpdateView):
     form_class = EventCreateForm
     success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
+
+    def get(self, request, pk, **kwargs):
+        if request.user != self.get_object().user:
+            raise Http404('Event does not exist.')
+        else:
+            return self.post(self,request)
+            #return render(request, 'MyCalendar/event_update_form.html', context={'pk': pk})
+
+
 
 #give up on this for awhile
 @method_decorator(login_required, name='dispatch')

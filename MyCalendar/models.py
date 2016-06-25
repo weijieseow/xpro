@@ -43,6 +43,8 @@ class Task(models.Model):
     def __str__(self):
         return self.task_name
 
+    def get_absolute_url(self):
+        return "/MyCalendar/task/%i/" % self.pk
 '''
 class TaskList(models.Model):
     #maybe we can use a list?

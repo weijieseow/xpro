@@ -1,4 +1,5 @@
-from django.views.generic import edit
+from django.views.generic import edit, list
+
 from .models import Event, Task
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
 from django.contrib.auth.models import User
@@ -15,7 +16,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
+from django.http import Http404
 
+#not in use now
 @login_required(login_url=('MyCalendar:login'))
 def eventView(request):
     return render(request,'MyCalendar/cal_month.html')
@@ -56,6 +59,27 @@ class eventUpdateView(edit.UpdateView):
 
 
 #give up on this for awhile
+    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
+    def get(self, request, pk, **kwargs):
+        if request.user != self.get_object().user:
+            raise Http404('Event does not exist.')
+        else:
+            return self.post(self, request)
+    #def post(self,request):
+     #   event = EventCreateForm(data=request.POST)
+      #  if event.is_valid():
+       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
+        #        return HttpResponse('The end date must be later than the start date.')
+         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
+          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
+           #     return HttpResponse('The end time must be later than the start time.')
+            #else:
+
+
+
+
+
+>>>>>>> tyean-ya-edit
 @method_decorator(login_required, name='dispatch')
 class eventDeleteView(edit.DeleteView):
     model = Event
@@ -64,12 +88,13 @@ class eventDeleteView(edit.DeleteView):
 
 
 @login_required(login_url=('MyCalendar:login'))
-def tasksListView(request):
+def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user)
     number_of_tasks = user_tasks.count()
     return render(request, 'MyCalendar/TasksView.html',
                   {'user_tasks': user_tasks, 'number_of_tasks': number_of_tasks})
+
 
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
@@ -80,7 +105,7 @@ def taskCreateView(request):
             task_without_user.user = request.user
             task.save()
 
-            return redirect('MyCalendar:taskslist')
+            return redirect('MyCalendar:tasklist')
         else:
             errors = task.errors
             return HttpResponse(errors.items())
@@ -89,6 +114,39 @@ def taskCreateView(request):
         return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
 
+
+@method_decorator(login_required, name='dispatch')
+class taskUpdateView(edit.UpdateView):
+    model = Task
+    form_class = TaskCreateForm
+    success_url = "MyCalendar:tasklist"
+    template_name = 'TaskUpdate'
+
+    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
+    def get(self, request, pk, **kwargs):
+        if request.user != self.get_object().user:
+            raise Http404('Task does not exist.')
+        else:
+            return self.post(self, request)
+    #def post(self,request):
+     #   event = EventCreateForm(data=request.POST)
+      #  if event.is_valid():
+       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
+        #        return HttpResponse('The end date must be later than the start date.')
+         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
+          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
+           #     return HttpResponse('The end time must be later than the start time.')
+            #else:
+
+
+
+
+
+@method_decorator(login_required, name='dispatch')
+class taskDeleteView(edit.DeleteView):
+    model = Task
+    template_name = 'TaskDelete'
+    success_url = reverse_lazy('MyCalendar:calendar')
 
 @login_required(login_url=('MyCalendar:login'))
 def aboutUsView(request):
@@ -275,7 +333,7 @@ def loginView(request):
                 # If the account is valid and active, we can log the user in.
                 # We'll send the user back to the homepage.
                 login(request, user)
-                return redirect('MyCalendar:taskslist')
+                return redirect('MyCalendar:tasklist')
             else:
                 # An inactive account was used - no logging in!
                 return HttpResponse("Your X-Pro account is disabled.")

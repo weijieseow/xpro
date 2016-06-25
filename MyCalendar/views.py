@@ -1,4 +1,4 @@
-from django.views.generic import edit, list
+from django.views.generic import edit
 
 from .models import Event, Task
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
@@ -76,10 +76,6 @@ class eventUpdateView(edit.UpdateView):
             #else:
 
 
-
-
-
->>>>>>> tyean-ya-edit
 @method_decorator(login_required, name='dispatch')
 class eventDeleteView(edit.DeleteView):
     model = Event
@@ -119,8 +115,8 @@ def taskCreateView(request):
 class taskUpdateView(edit.UpdateView):
     model = Task
     form_class = TaskCreateForm
-    success_url = "MyCalendar:tasklist"
-    template_name = 'TaskUpdate'
+    success_url = reverse_lazy("MyCalendar:tasklist")
+    template_name = 'MyCalendar/TaskUpdate.html'
 
     #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
     def get(self, request, pk, **kwargs):
@@ -145,8 +141,8 @@ class taskUpdateView(edit.UpdateView):
 @method_decorator(login_required, name='dispatch')
 class taskDeleteView(edit.DeleteView):
     model = Task
-    template_name = 'TaskDelete'
-    success_url = reverse_lazy('MyCalendar:calendar')
+    template_name = 'MyCalendar/TaskDelete.html'
+    success_url = reverse_lazy('MyCalendar:tasklist')
 
 @login_required(login_url=('MyCalendar:login'))
 def aboutUsView(request):

@@ -9,7 +9,17 @@
 
     <div class="container-fluid">
     <h1>New Event</h1>
+
+        {% if end_date < start_date %}
+            <p style="color:red">The start date must be earlier than the end date.</p>
+
+        {% elif end_date == start_date and end_time < start_time %}
+            <p style="color:red">The start time must be earlier than the end time.</p>
+
+        {% endif %}
+
         <form class="form-group" id="event_create_form" method="POST">
+
             {% csrf_token %}
 
             {{ form.as_p }}

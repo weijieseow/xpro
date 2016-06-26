@@ -1,4 +1,4 @@
-from django.views.generic import edit, list
+from django.views.generic import edit
 
 from .models import Event, Task
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
@@ -21,7 +21,7 @@ from django.http import Http404
 #not in use now
 @login_required(login_url=('MyCalendar:login'))
 def eventView(request):
-    return render(request,'MyCalender:')
+    return render(request,'MyCalendar/cal_month.html')
 
 @login_required(login_url=('MyCalendar:login'))
 def eventCreateView(request):
@@ -57,6 +57,8 @@ class eventUpdateView(edit.UpdateView):
     success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
 
+
+#give up on this for awhile
     #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
@@ -72,9 +74,6 @@ class eventUpdateView(edit.UpdateView):
           #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
            #     return HttpResponse('The end time must be later than the start time.')
             #else:
-
-
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -116,8 +115,8 @@ def taskCreateView(request):
 class taskUpdateView(edit.UpdateView):
     model = Task
     form_class = TaskCreateForm
-    success_url = "MyCalendar:tasklist"
-    template_name = 'TaskUpdate'
+    success_url = reverse_lazy("MyCalendar:tasklist")
+    template_name = 'MyCalendar/TaskUpdate.html'
 
     #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
     def get(self, request, pk, **kwargs):
@@ -142,8 +141,8 @@ class taskUpdateView(edit.UpdateView):
 @method_decorator(login_required, name='dispatch')
 class taskDeleteView(edit.DeleteView):
     model = Task
-    template_name = 'TaskDelete'
-    success_url = reverse_lazy('MyCalendar:calendar')
+    template_name = 'MyCalendar/TaskDelete.html'
+    success_url = reverse_lazy('MyCalendar:tasklist')
 
 @login_required(login_url=('MyCalendar:login'))
 def aboutUsView(request):

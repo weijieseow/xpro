@@ -11,8 +11,6 @@
 
     <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-success">New Task</a>
 
-
-
         {% if user_tasks %}
         <h1> You have
             {% if number_of_tasks > 1 %}
@@ -27,8 +25,8 @@
                     <h4>{{ task }}</h4>
                     <p>{{ task.description }}</p>
                     <br>
-                    <a href="%s" % task.get_absolute_url() %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                    <a href="{% url 'MyCalendar:taskdelete' pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                    <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
+                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
                 </div>
             {% endfor %}
         </ol>

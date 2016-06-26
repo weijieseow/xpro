@@ -6,15 +6,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
 
-    <h1>Update Task</h1>
-    <form id="task_update_form" method="POST">
-        {% csrf_token %}
+    <div class="container-fluid">
+        <h1>Update Task</h1>
+        <form id="task_update_form" method="POST">
+            {% csrf_token %}
 
-        {{ form.as_p }}
+            {{ form.as_p }}
 
-        <input type="submit" name="update" value="Update">
-    </form>
-
-    <a href="{% url 'MyCalendar:taskdelete' object.pk %}" class="btn btn-default">Delete</a>
+            <input type="submit" name="update" value="Update">
+        </form>
+    </div>
 
 {% endblock %}

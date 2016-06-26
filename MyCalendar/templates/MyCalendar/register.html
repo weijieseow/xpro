@@ -17,7 +17,7 @@
 
             <div class="jumbotron" id="register">
                 {% if registered %}
-                <strong>Thank you for registering!</strong>
+                <p><strong>Thank you for registering!</strong></p>
                 {% else %}
 
                 <form id="user_form" method="POST" action="{% url 'MyCalendar:register' %}" enctype="multipart/form-data">

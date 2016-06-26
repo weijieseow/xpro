@@ -13,9 +13,10 @@
 
             {{ form.as_p }}
 
-            <input type="submit" name="update" value="Update">
+            <input class="btn btn-default" type="submit" name="update" value="Update">
+            <a href="{% url 'MyCalendar:eventdelete' object.pk %}" class="btn btn-default">Delete</a>
         </form>
 
-        <a href="{% url 'MyCalendar:eventdelete' object.pk %}" class="btn btn-default">Delete</a>
+
     </div>
 {% endblock %}

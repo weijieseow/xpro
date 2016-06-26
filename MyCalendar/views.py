@@ -164,10 +164,8 @@ class EventCalendar(HTMLCalendar):
                 cssclass += ' filled'
                 body = ['<ul>']
                 for event in self.events[day]:
-                    body.append('<li>')
                     body.append('<a href="%s">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
-                    body.append('</li>')
                 body.append('</ul>')
                 return self.day_cell(cssclass, '%d %s' % (day, ''.join(body)))
             return self.day_cell(cssclass, day)

@@ -29,10 +29,24 @@ def eventCreateView(request):
         event = EventCreateForm(data=request.POST)
         if event.is_valid():
             if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-                return HttpResponse('The end date must be later than the start date.')
+                end_date = event.cleaned_data['end_date']
+                start_date = event.cleaned_data['start_date']
+                form = EventCreateForm()
+
+                return render(request, 'MyCalendar/EventCreate.html',
+                              {'form': form, 'end_date': end_date, 'start_date': start_date})
+
             elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
                     and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-                return HttpResponse('The end time must be later than the start time.')
+                end_date = event.cleaned_data['end_date']
+                start_date = event.cleaned_data['start_date']
+                end_time = event.cleaned_data['end_time']
+                start_time = event.cleaned_data['start_time']
+                form = EventCreateForm()
+
+                return render(request, 'MyCalendar/EventCreate.html',
+                              {'form': form, 'end_time': end_time, 'start_time': start_time,
+                               'end_date': end_date, 'start_date': start_date})
 
             event_without_user = event.save(commit=False)
             event_without_user.user = request.user
@@ -164,8 +178,10 @@ class EventCalendar(HTMLCalendar):
                 cssclass += ' filled'
                 body = ['<ul>']
                 for event in self.events[day]:
-                    body.append('<a href="%s">' % event.get_absolute_url())
+                    body.append('<ol>')
+                    body.append('<a href="%s" style="font-size:small">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
+                    body.append('</ol>')
                 body.append('</ul>')
                 return self.day_cell(cssclass, '%d %s' % (day, ''.join(body)))
             return self.day_cell(cssclass, day)

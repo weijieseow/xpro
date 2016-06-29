@@ -26,41 +26,38 @@ def eventView(request):
 @login_required(login_url=('MyCalendar:login'))
 def eventCreateView(request):
     if request.method == "POST":
-        event = EventCreateForm(data=request.POST)
-        if event.is_valid():
-            if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-                end_date = event.cleaned_data['end_date']
-                start_date = event.cleaned_data['start_date']
+        form = EventCreateForm(data=request.POST)
+        if form.is_valid():
+            if form.cleaned_data['end_date'] < form.cleaned_data['start_date']:
+                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date']
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_date': end_date, 'start_date': start_date})
 
-            elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
+            elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
                     and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-                end_date = event.cleaned_data['end_date']
-                start_date = event.cleaned_data['start_date']
-                end_time = event.cleaned_data['end_time']
-                start_time = event.cleaned_data['start_time']
+                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date']
+                end_time = form.cleaned_data['end_time']
+                start_time = form.cleaned_data['start_time']
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_time': end_time, 'start_time': start_time,
                                'end_date': end_date, 'start_date': start_date})
 
-            event_without_user = event.save(commit=False)
+            event_without_user = form.save(commit=False)
             event_without_user.user = request.user
-            event.save()
+            form.save()
 
             return redirect('MyCalendar:calendar')
-        else:
-            errors = event.errors
-            return HttpResponse(errors.items())
-#we really need more error checking. at the moment, the end date time thing is kinda handled i guess.
 
     else:
         form = EventCreateForm()
-        return render(request, 'MyCalendar/EventCreate.html', {'form': form})
+
+    return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
 
@@ -71,23 +68,11 @@ class eventUpdateView(edit.UpdateView):
     success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
 
-
-#give up on this for awhile
-    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
             raise Http404('Event does not exist.')
         else:
             return self.post(self, request)
-    #def post(self,request):
-     #   event = EventCreateForm(data=request.POST)
-      #  if event.is_valid():
-       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-        #        return HttpResponse('The end date must be later than the start date.')
-         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
-          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-           #     return HttpResponse('The end time must be later than the start time.')
-            #else:
 
 
 @method_decorator(login_required, name='dispatch')
@@ -109,19 +94,17 @@ def taskListView(request):
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
     if request.method == "POST":
-        task = TaskCreateForm(data=request.POST)
-        if task.is_valid():
-            task_without_user = task.save(commit=False)
+        form = TaskCreateForm(data=request.POST)
+        if form.is_valid():
+            task_without_user = form.save(commit=False)
             task_without_user.user = request.user
             task.save()
-
             return redirect('MyCalendar:tasklist')
-        else:
-            errors = task.errors
-            return HttpResponse(errors.items())
+
     else:
         form = TaskCreateForm()
-        return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
+
+    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
 
 
@@ -138,18 +121,6 @@ class taskUpdateView(edit.UpdateView):
             raise Http404('Task does not exist.')
         else:
             return self.post(self, request)
-    #def post(self,request):
-     #   event = EventCreateForm(data=request.POST)
-      #  if event.is_valid():
-       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-        #        return HttpResponse('The end date must be later than the start date.')
-         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
-          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-           #     return HttpResponse('The end time must be later than the start time.')
-            #else:
-
-
-
 
 
 @method_decorator(login_required, name='dispatch')

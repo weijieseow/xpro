@@ -7,7 +7,8 @@
     <div class="container-fluid">
 
         <a href="{% url 'MyCalendar:eventcreate' %}" class="btn btn-success">New Event</a>
-        
+
+        <div class="col-md-12">
         <table width="100%">
             <tr>
                 <td width="20%" align="left">
@@ -32,6 +33,7 @@
 
         <div id="calendar">
           {{Calendar}}
+        </div>
         </div>
     </div>
 

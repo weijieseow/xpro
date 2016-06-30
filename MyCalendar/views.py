@@ -98,7 +98,7 @@ def taskCreateView(request):
         if form.is_valid():
             task_without_user = form.save(commit=False)
             task_without_user.user = request.user
-            task.save()
+            form.save()
             return redirect('MyCalendar:tasklist')
 
     else:

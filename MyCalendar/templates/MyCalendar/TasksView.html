@@ -21,14 +21,12 @@
         </h1>
         <ol>
             {% for task in user_tasks %}
-                <div class="col-md-4">
-                    <div class="well well-sm">
-                        <h4>{{ task }}</h4>
-                        <p>{{ task.description }}</p>
-                        <br>
-                        <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                        <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
-                    </div>
+                <div class="well well-sm">
+                    <h4>{{ task }}</h4>
+                    <p>{{ task.description }}</p>
+                    <br>
+                    <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
+                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
                 </div>
             {% endfor %}
         </ol>

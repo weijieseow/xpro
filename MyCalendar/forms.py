@@ -34,4 +34,5 @@ class TaskCreateForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['task_name', 'task_date', 'description']
-        widgets = {'task_date': forms.SelectDateWidget, 'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}
+        widgets = {'task_date': forms.SelectDateWidget,
+                   'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}

@@ -46,3 +46,6 @@
     font-size: small;
 }
 
+pre {
+    white-space: pre-wrap;
+}

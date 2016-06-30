@@ -86,9 +86,26 @@ class eventDeleteView(edit.DeleteView):
 def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user)
-    number_of_tasks = user_tasks.count()
-    return render(request, 'MyCalendar/TasksView.html',
-                  {'user_tasks': user_tasks, 'number_of_tasks': number_of_tasks})
+    overdue_tasks = []
+    current_tasks = []
+    for task in user_tasks:
+        if task.task_date >= date.today():
+            current_tasks.append(task)
+        else:
+            overdue_tasks.append(task)
+
+    date_today = date.today()
+    number_of_current_tasks = len(current_tasks)
+    number_of_overdue_tasks = len(overdue_tasks)
+
+    context = {'current_tasks': current_tasks,
+               'number_of_current_tasks': number_of_current_tasks,
+               'overdue_tasks': overdue_tasks,
+               'number_of_overdue_tasks': number_of_overdue_tasks,
+               'date_today': date_today
+    }
+
+    return render(request, 'MyCalendar/TasksView.html', context)
 
 
 @login_required(login_url=('MyCalendar:login'))
@@ -182,7 +199,7 @@ def home(request):
     Show calendar of events this month
     """
     lToday = datetime.now()
-    return calendar(request, lToday.year, lToday.month)
+    return calendarView(request, lToday.year, lToday.month)
 
 @login_required(login_url=('MyCalendar:login'))
 def calendarView(request, year=None, month=None):

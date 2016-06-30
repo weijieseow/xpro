@@ -25,7 +25,10 @@ class Event(models.Model):
     end_date = models.DateField(null=True, default=date.today(),
                                 help_text='The end date must be later than the start date')
     end_time = models.TimeField(null=True, help_text='The end must be later than the start ')
+
+
     description = models.TextField(blank=True)
+
 
     def __str__(self):
         return self.event_name

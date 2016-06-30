@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
-from datetime import date, datetime
+from datetime import date, datetime,timedelta
 from itertools import groupby
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
@@ -167,17 +167,17 @@ class EventCalendar(HTMLCalendar):
 
     def __init__(self, events):
         super(EventCalendar, self).__init__()
-        self.events = self.group_by_day(events)
+        self.events = self.group_by_range(events)
 
     def formatday(self, day, weekday):
         if day != 0:
             cssclass = self.cssclasses[weekday]
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today'
-            if day in self.events:
+            if day in self.events[self.year][self.month]:
                 cssclass += ' filled'
                 body = ['<ul>']
-                for event in self.events[day]:
+                for event in self.events[self.year][self.month][day]:
                     body.append('<ol>')
                     body.append('<a href="%s" style="font-size:small">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
@@ -191,11 +191,33 @@ class EventCalendar(HTMLCalendar):
         self.year, self.month = year, month
         return super(EventCalendar, self).formatmonth(year, month)
 
-    def group_by_day(self, events):
-        field = lambda event: event.start_date.day
-        return dict(
-            [(day, list(items)) for day, items in groupby(events, field)]
-        )
+
+#experimental solution: creating a dictionary of dictionaries
+    def group_by_range(self, events):
+        end_dict = {}
+        for event in events:
+            start = event.start_date
+            end = event.end_date
+            event_range = [start]
+            while start != end:
+                start += timedelta(days=1)
+                event_range.append(start)
+
+            for event_date in event_range:
+                if event_date.year in end_dict:
+                    if event_date.month in end_dict[event_date.year]:
+                        if event_date.day in end_dict[event_date.year][event_date.month]:
+                            end_dict[event_date.year][event_date.month][event_date.day].append(event)
+                        else:
+                            end_dict[event_date.year][event_date.month][event_date.day] = [event]
+                    else:
+                        end_dict[event_date.year][event_date.month] = {event_date.day: [event]}
+                else:
+                    end_dict[event_date.year] = {event_date.month: {event_date.day: [event]}}
+
+        return end_dict
+
+
 
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
@@ -211,7 +233,7 @@ def home(request):
     Show calendar of events this month
     """
     lToday = datetime.now()
-    return calendar(request, lToday.year, lToday.month)
+    return calendarView(request, lToday.year, lToday.month)
 
 @login_required(login_url=('MyCalendar:login'))
 def calendarView(request, year=None, month=None):
@@ -231,9 +253,12 @@ def calendarView(request, year=None, month=None):
     lMonth = int(month)
     lCalendarFromMonth = datetime(lYear, lMonth, 1)
     lCalendarToMonth = datetime(lYear, lMonth, monthrange(lYear, lMonth)[1])
-    MonthlyEvents = Event.objects.filter(start_date__gte=lCalendarFromMonth, start_date__lte=lCalendarToMonth,
-                                         user__username__exact=username)
-    lCalendar = EventCalendar(MonthlyEvents).formatmonth(lYear, lMonth)
+    # for spanning events to work across months and/or years, the filter must only filter using username, which may be
+    # redundant anyway. The above 2 variables are thus not in use.
+    UserEvents = Event.objects.filter(user__username__exact=username)
+
+    lCalendar = EventCalendar(UserEvents).formatmonth(lYear, lMonth)
+
     lPreviousYear = lYear
     lPreviousMonth = lMonth - 1
     if lPreviousMonth == 0:

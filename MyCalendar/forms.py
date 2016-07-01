@@ -38,9 +38,13 @@ class EventCreateForm(forms.ModelForm):
 
 
 class TaskCreateForm(forms.ModelForm):
+
     task_date = forms.DateField(widget=DateInput())
+
     class Meta:
         model = Task
         fields = ['task_name', 'task_date', 'description']
         widgets = {'task_date': forms.SelectDateWidget,
                    'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}
+
+

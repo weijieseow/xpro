@@ -37,7 +37,11 @@ def eventCreateView(request):
                               {'form': form, 'end_date': end_date, 'start_date': start_date})
 
             elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
+
                     and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
+
+                    and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
+
                 end_date = form.cleaned_data['end_date']
                 start_date = form.cleaned_data['start_date']
                 end_time = form.cleaned_data['end_time']
@@ -68,23 +72,11 @@ class eventUpdateView(edit.UpdateView):
     success_url = "/MyCalendar/"
     template_name_suffix = '_update_form'
 
-
-#give up on this for awhile
-    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
             raise Http404('Event does not exist.')
         else:
             return self.post(self, request)
-    #def post(self,request):
-     #   event = EventCreateForm(data=request.POST)
-      #  if event.is_valid():
-       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-        #        return HttpResponse('The end date must be later than the start date.')
-         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
-          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-           #     return HttpResponse('The end time must be later than the start time.')
-            #else:
 
 
 @method_decorator(login_required, name='dispatch')
@@ -110,6 +102,17 @@ def taskListView(request):
     number_of_current_tasks = len(current_tasks)
     number_of_overdue_tasks = len(overdue_tasks)
 
+
+    context = {'current_tasks': current_tasks,
+               'number_of_current_tasks': number_of_current_tasks,
+               'overdue_tasks': overdue_tasks,
+               'number_of_overdue_tasks': number_of_overdue_tasks,
+               'date_today': date_today
+    }
+
+    return render(request, 'MyCalendar/TasksView.html', context)
+
+
     context = {'current_tasks': current_tasks,
                'number_of_current_tasks': number_of_current_tasks,
                'overdue_tasks': overdue_tasks,
@@ -133,6 +136,13 @@ def taskCreateView(request):
         else:
             form = TaskCreateForm()
 
+            return redirect('MyCalendar:tasklist')
+
+    else:
+        form = TaskCreateForm()
+
+    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
+
 
     return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
@@ -143,24 +153,12 @@ class taskUpdateView(edit.UpdateView):
     success_url = reverse_lazy("MyCalendar:tasklist")
     template_name = 'MyCalendar/TaskUpdate.html'
 
-    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
+   
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
             raise Http404('Task does not exist.')
         else:
             return self.post(self, request)
-    #def post(self,request):
-     #   event = EventCreateForm(data=request.POST)
-      #  if event.is_valid():
-       #     if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-        #        return HttpResponse('The end date must be later than the start date.')
-         #   elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
-          #          and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-           #     return HttpResponse('The end time must be later than the start time.')
-            #else:
-
-
-
 
 
 @method_decorator(login_required, name='dispatch')

@@ -26,41 +26,38 @@ def eventView(request):
 @login_required(login_url=('MyCalendar:login'))
 def eventCreateView(request):
     if request.method == "POST":
-        event = EventCreateForm(data=request.POST)
-        if event.is_valid():
-            if event.cleaned_data['end_date'] < event.cleaned_data['start_date']:
-                end_date = event.cleaned_data['end_date']
-                start_date = event.cleaned_data['start_date']
+        form = EventCreateForm(data=request.POST)
+        if form.is_valid():
+            if form.cleaned_data['end_date'] < form.cleaned_data['start_date']:
+                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date']
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_date': end_date, 'start_date': start_date})
 
-            elif event.cleaned_data['end_date'] == event.cleaned_data['start_date'] \
-                    and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-                end_date = event.cleaned_data['end_date']
-                start_date = event.cleaned_data['start_date']
-                end_time = event.cleaned_data['end_time']
-                start_time = event.cleaned_data['start_time']
+            elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
+                    and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
+                end_date = form.cleaned_data['end_date']
+                start_date = form.cleaned_data['start_date']
+                end_time = form.cleaned_data['end_time']
+                start_time = form.cleaned_data['start_time']
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_time': end_time, 'start_time': start_time,
                                'end_date': end_date, 'start_date': start_date})
 
-            event_without_user = event.save(commit=False)
+            event_without_user = form.save(commit=False)
             event_without_user.user = request.user
-            event.save()
+            form.save()
 
             return redirect('MyCalendar:calendar')
-        else:
-            errors = event.errors
-            return HttpResponse(errors.items())
-#we really need more error checking. at the moment, the end date time thing is kinda handled i guess.
 
     else:
         form = EventCreateForm()
-        return render(request, 'MyCalendar/EventCreate.html', {'form': form})
+
+    return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
 
@@ -101,29 +98,43 @@ class eventDeleteView(edit.DeleteView):
 def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user)
-    number_of_tasks = user_tasks.count()
-    return render(request, 'MyCalendar/TasksView.html',
-                  {'user_tasks': user_tasks, 'number_of_tasks': number_of_tasks})
+    overdue_tasks = []
+    current_tasks = []
+    for task in user_tasks:
+        if task.task_date >= date.today():
+            current_tasks.append(task)
+        else:
+            overdue_tasks.append(task)
 
+    date_today = date.today()
+    number_of_current_tasks = len(current_tasks)
+    number_of_overdue_tasks = len(overdue_tasks)
+
+    context = {'current_tasks': current_tasks,
+               'number_of_current_tasks': number_of_current_tasks,
+               'overdue_tasks': overdue_tasks,
+               'number_of_overdue_tasks': number_of_overdue_tasks,
+               'date_today': date_today
+    }
+
+    return render(request, 'MyCalendar/TasksView.html', context)
 
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
     if request.method == "POST":
-        task = TaskCreateForm(data=request.POST)
-        if task.is_valid():
-            task_without_user = task.save(commit=False)
+        form = TaskCreateForm(data=request.POST)
+        if form.is_valid():
+            task_without_user = form.save(commit=False)
             task_without_user.user = request.user
-            task.save()
+            form.save()
 
             return redirect('MyCalendar:tasklist')
+
         else:
-            errors = task.errors
-            return HttpResponse(errors.items())
-    else:
-        form = TaskCreateForm()
-        return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
+            form = TaskCreateForm()
 
 
+    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
 @method_decorator(login_required, name='dispatch')
 class taskUpdateView(edit.UpdateView):

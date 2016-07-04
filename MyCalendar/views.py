@@ -1,6 +1,6 @@
 from django.views.generic import edit
 
-from .models import Event, Task
+from .models import Event, Task, GroupTask, AGroup
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -37,11 +37,7 @@ def eventCreateView(request):
                               {'form': form, 'end_date': end_date, 'start_date': start_date})
 
             elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
-
                     and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
-
-                    and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
-
                 end_date = form.cleaned_data['end_date']
                 start_date = form.cleaned_data['start_date']
                 end_time = form.cleaned_data['end_time']
@@ -60,7 +56,6 @@ def eventCreateView(request):
 
     else:
         form = EventCreateForm()
-
     return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
@@ -102,7 +97,6 @@ def taskListView(request):
     number_of_current_tasks = len(current_tasks)
     number_of_overdue_tasks = len(overdue_tasks)
 
-
     context = {'current_tasks': current_tasks,
                'number_of_current_tasks': number_of_current_tasks,
                'overdue_tasks': overdue_tasks,
@@ -113,14 +107,6 @@ def taskListView(request):
     return render(request, 'MyCalendar/TasksView.html', context)
 
 
-    context = {'current_tasks': current_tasks,
-               'number_of_current_tasks': number_of_current_tasks,
-               'overdue_tasks': overdue_tasks,
-               'number_of_overdue_tasks': number_of_overdue_tasks,
-               'date_today': date_today
-    }
-
-    return render(request, 'MyCalendar/TasksView.html', context)
 
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
@@ -133,18 +119,11 @@ def taskCreateView(request):
 
             return redirect('MyCalendar:tasklist')
 
-        else:
-            form = TaskCreateForm()
-
-            return redirect('MyCalendar:tasklist')
-
     else:
         form = TaskCreateForm()
 
     return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
-
-    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
 @method_decorator(login_required, name='dispatch')
 class taskUpdateView(edit.UpdateView):
@@ -153,7 +132,7 @@ class taskUpdateView(edit.UpdateView):
     success_url = reverse_lazy("MyCalendar:tasklist")
     template_name = 'MyCalendar/TaskUpdate.html'
 
-   
+
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
             raise Http404('Task does not exist.')
@@ -165,6 +144,12 @@ class taskUpdateView(edit.UpdateView):
 class taskDeleteView(edit.DeleteView):
     model = Task
     template_name = 'MyCalendar/TaskDelete.html'
+    success_url = reverse_lazy('MyCalendar:tasklist')
+
+
+class groupTaskCreateView(edit.CreateView):
+    model = GroupTask
+    template_name = 'MyCalendar/GroupTaskCreate.html'
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 @login_required(login_url=('MyCalendar:login'))
@@ -183,7 +168,7 @@ class EventCalendar(HTMLCalendar):
             cssclass = self.cssclasses[weekday]
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today'
-            if day in self.events[self.year][self.month]:
+            if self.events != {}and day in self.events[self.year][self.month]:
                 cssclass += ' filled'
                 body = ['<ul>']
                 for event in self.events[self.year][self.month][day]:
@@ -281,7 +266,7 @@ def calendarView(request, year=None, month=None):
     lYearAfterThis = lYear + 1
     lYearBeforeThis = lYear - 1
 
-    return render(request, 'MyCalendar/cal_month.html', {'Calendar' : mark_safe(lCalendar),
+    return render(request, 'MyCalendar/cal_month.html', {'Calendar': mark_safe(lCalendar),
                                                        'Month' : lMonth,
                                                        'MonthName' : named_month(lMonth),
                                                        'Year' : lYear,
@@ -397,3 +382,9 @@ def logoutView(request):
     logout(request)
     # Redirect to a success page.
     return render(request, 'MyCalendar/successlogout.html')
+
+class groupCreateView(edit.CreateView):
+    model = AGroup
+    success_url = reverse_lazy("MyCalendar:group")
+    template_name = 'MyCalendar/TaskUpdate.html'
+

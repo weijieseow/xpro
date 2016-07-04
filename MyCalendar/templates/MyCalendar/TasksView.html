@@ -26,7 +26,7 @@
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }}</a>
+                            <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }} - {{ task.task_date }}</a>
                         </h4>
                       </div>
                     <div id="{{ task.pk }}" class="panel-collapse collapse">
@@ -60,7 +60,7 @@
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }}</a>
+                            <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }} - {{ task.task_date }}</a>
                         </h4>
                       </div>
                     <div id="{{ task.pk}}" class="panel-collapse collapse">

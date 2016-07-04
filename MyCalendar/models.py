@@ -49,7 +49,7 @@ class Task(models.Model):
     def get_absolute_url(self):
         return "/MyCalendar/task/%i/" % self.pk
 
-
+'''
 class AGroup(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(Model)
@@ -71,3 +71,4 @@ class GroupTask(models.Model):
 
     def __str__(self):
         return self.task_name
+'''

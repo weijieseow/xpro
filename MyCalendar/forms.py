@@ -48,4 +48,3 @@ class TaskCreateForm(forms.ModelForm):
                    'description': forms.Textarea(attrs={'rows': 1, 'cols': 40, 'style': 'height: 3em;'})}
 
 
-

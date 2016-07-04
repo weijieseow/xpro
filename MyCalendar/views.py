@@ -1,12 +1,12 @@
 from django.views.generic import edit
 
-from .models import Event, Task
+from .models import Event, Task, GroupTask, AGroup
 from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
-from datetime import date, datetime
+from datetime import date, datetime,timedelta
 from itertools import groupby
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
@@ -37,7 +37,7 @@ def eventCreateView(request):
                               {'form': form, 'end_date': end_date, 'start_date': start_date})
 
             elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
-                    and event.cleaned_data['end_time'] < event.cleaned_data['start_time']:
+                    and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
                 end_date = form.cleaned_data['end_date']
                 start_date = form.cleaned_data['start_date']
                 end_time = form.cleaned_data['end_time']
@@ -56,7 +56,6 @@ def eventCreateView(request):
 
     else:
         form = EventCreateForm()
-
     return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
@@ -108,6 +107,7 @@ def taskListView(request):
     return render(request, 'MyCalendar/TasksView.html', context)
 
 
+
 @login_required(login_url=('MyCalendar:login'))
 def taskCreateView(request):
     if request.method == "POST":
@@ -116,13 +116,13 @@ def taskCreateView(request):
             task_without_user = form.save(commit=False)
             task_without_user.user = request.user
             form.save()
+
             return redirect('MyCalendar:tasklist')
 
     else:
         form = TaskCreateForm()
 
     return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -132,7 +132,7 @@ class taskUpdateView(edit.UpdateView):
     success_url = reverse_lazy("MyCalendar:tasklist")
     template_name = 'MyCalendar/TaskUpdate.html'
 
-    #idk this is right or not, it's weird. I'm basically overidding the get() method to either post or raise error
+
     def get(self, request, pk, **kwargs):
         if request.user != self.get_object().user:
             raise Http404('Task does not exist.')
@@ -146,6 +146,12 @@ class taskDeleteView(edit.DeleteView):
     template_name = 'MyCalendar/TaskDelete.html'
     success_url = reverse_lazy('MyCalendar:tasklist')
 
+
+class groupTaskCreateView(edit.CreateView):
+    model = GroupTask
+    template_name = 'MyCalendar/GroupTaskCreate.html'
+    success_url = reverse_lazy('MyCalendar:tasklist')
+
 @login_required(login_url=('MyCalendar:login'))
 def aboutUsView(request):
     return render(request, 'MyCalendar/AboutUs.html')
@@ -155,17 +161,17 @@ class EventCalendar(HTMLCalendar):
 
     def __init__(self, events):
         super(EventCalendar, self).__init__()
-        self.events = self.group_by_day(events)
+        self.events = self.group_by_range(events)
 
     def formatday(self, day, weekday):
         if day != 0:
             cssclass = self.cssclasses[weekday]
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today'
-            if day in self.events:
+            if self.events != {}and day in self.events[self.year][self.month]:
                 cssclass += ' filled'
                 body = ['<ul>']
-                for event in self.events[day]:
+                for event in self.events[self.year][self.month][day]:
                     body.append('<ol>')
                     body.append('<a href="%s" style="font-size:small">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
@@ -179,11 +185,33 @@ class EventCalendar(HTMLCalendar):
         self.year, self.month = year, month
         return super(EventCalendar, self).formatmonth(year, month)
 
-    def group_by_day(self, events):
-        field = lambda event: event.start_date.day
-        return dict(
-            [(day, list(items)) for day, items in groupby(events, field)]
-        )
+
+#experimental solution: creating a dictionary of dictionaries
+    def group_by_range(self, events):
+        end_dict = {}
+        for event in events:
+            start = event.start_date
+            end = event.end_date
+            event_range = [start]
+            while start != end:
+                start += timedelta(days=1)
+                event_range.append(start)
+
+            for event_date in event_range:
+                if event_date.year in end_dict:
+                    if event_date.month in end_dict[event_date.year]:
+                        if event_date.day in end_dict[event_date.year][event_date.month]:
+                            end_dict[event_date.year][event_date.month][event_date.day].append(event)
+                        else:
+                            end_dict[event_date.year][event_date.month][event_date.day] = [event]
+                    else:
+                        end_dict[event_date.year][event_date.month] = {event_date.day: [event]}
+                else:
+                    end_dict[event_date.year] = {event_date.month: {event_date.day: [event]}}
+
+        return end_dict
+
+
 
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
@@ -219,9 +247,12 @@ def calendarView(request, year=None, month=None):
     lMonth = int(month)
     lCalendarFromMonth = datetime(lYear, lMonth, 1)
     lCalendarToMonth = datetime(lYear, lMonth, monthrange(lYear, lMonth)[1])
-    MonthlyEvents = Event.objects.filter(start_date__gte=lCalendarFromMonth, start_date__lte=lCalendarToMonth,
-                                         user__username__exact=username)
-    lCalendar = EventCalendar(MonthlyEvents).formatmonth(lYear, lMonth)
+    # for spanning events to work across months and/or years, the filter must only filter using username, which may be
+    # redundant anyway. The above 2 variables are thus not in use.
+    UserEvents = Event.objects.filter(user__username__exact=username)
+
+    lCalendar = EventCalendar(UserEvents).formatmonth(lYear, lMonth)
+
     lPreviousYear = lYear
     lPreviousMonth = lMonth - 1
     if lPreviousMonth == 0:
@@ -235,7 +266,7 @@ def calendarView(request, year=None, month=None):
     lYearAfterThis = lYear + 1
     lYearBeforeThis = lYear - 1
 
-    return render(request, 'MyCalendar/cal_month.html', {'Calendar' : mark_safe(lCalendar),
+    return render(request, 'MyCalendar/cal_month.html', {'Calendar': mark_safe(lCalendar),
                                                        'Month' : lMonth,
                                                        'MonthName' : named_month(lMonth),
                                                        'Year' : lYear,
@@ -351,3 +382,9 @@ def logoutView(request):
     logout(request)
     # Redirect to a success page.
     return render(request, 'MyCalendar/successlogout.html')
+
+class groupCreateView(edit.CreateView):
+    model = AGroup
+    success_url = reverse_lazy("MyCalendar:group")
+    template_name = 'MyCalendar/TaskUpdate.html'
+

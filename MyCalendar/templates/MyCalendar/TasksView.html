@@ -11,6 +11,7 @@
 
         <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-success">New Task</a>
 
+    <div class="container-fluid">
         {% if overdue_tasks %}
         <h1> You have
             {% if number_of_overdue_tasks > 1 %}
@@ -20,6 +21,7 @@
             {% endif %}
         </h1>
         <ol>
+
             {% for task in overdue_tasks %}
                 <br>
                 <div class="panel-group">
@@ -44,7 +46,9 @@
             {% endfor %}
         </ol>
         {% endif %}
+    </div>
 
+    <div class="container-fluid">
         {% if current_tasks %}
         <h1> You have
             {% if number_of_current_tasks > 1 %}
@@ -78,7 +82,7 @@
             {% endfor %}
         </ol>
         {% endif %}
-
+    </div>
 
         {% if not current_tasks %}
             {% if not overdue_tasks %}

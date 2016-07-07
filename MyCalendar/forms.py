@@ -39,7 +39,7 @@ class EventCreateForm(forms.ModelForm):
 
 class TaskCreateForm(forms.ModelForm):
 
-    task_date = forms.DateField(widget=DateInput())
+    #task_date = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Task

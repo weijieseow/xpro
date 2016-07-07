@@ -169,3 +169,9 @@ ENV/
 *.pyc
 *~
 *.swp
+
+venv
+*.pyc
+staticfiles
+.env
+db.sqlite3

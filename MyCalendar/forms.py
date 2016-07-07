@@ -26,8 +26,8 @@ class UserProfileForm(forms.ModelForm):
 
 class EventCreateForm(forms.ModelForm):
 
-    start_date = forms.DateField(widget=DateInput())
-    end_date = forms.DateField(widget=DateInput())
+    #start_date = forms.DateField(widget=DateInput())
+    #end_date = forms.DateField(widget=DateInput())
 
     class Meta:
         model = Event

@@ -170,7 +170,7 @@ ENV/
 *~
 *.swp
 
-venv
+.venv
 *.pyc
 staticfiles
 .env

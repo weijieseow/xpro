@@ -22,13 +22,13 @@ urlpatterns = [
     url(r'^AboutUs/$', views.aboutUsView, name="aboutus"),
 
     # /MyCalendar/register
-    url(r'^register/$', views.registerView, name='register'),
+    #url(r'^register/$', views.registerView, name='register'),
 
     # /MyCalendar/login
-    url(r'^login/$', views.loginView, name='login'),
+    #url(r'^login/$', views.loginView, name='login'),
 
     # logout
-    url(r'^logout/$', views.logoutView, name='logout'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
 
     # /MyCalendar/EventCreate
     url(r'^EventCreate/$', views.eventCreateView, name='eventcreate'),

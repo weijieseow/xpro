@@ -17,7 +17,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^$', 'MyCalendar.views.loginView'),
+    #url(r'^$', 'MyCalendar.views.loginView'),
     url(r'^admin/', admin.site.urls),
     url(r'^MyCalendar/', include('MyCalendar.urls')),
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
 ]

@@ -18,9 +18,6 @@ urlpatterns = [
     # /MyCalendar/event/delete
     url(r'^event/(?P<pk>[0-9]+)/delete/$', views.eventDeleteView.as_view(), name="eventdelete"),
 
-    # /MyCalendar/AboutUs
-    url(r'^AboutUs/$', views.aboutUsView, name="aboutus"),
-
     # /MyCalendar/register
     #url(r'^register/$', views.registerView, name='register'),
 

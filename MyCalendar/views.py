@@ -149,11 +149,6 @@ class taskDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
-@login_required
-def aboutUsView(request):
-    return render(request, 'MyCalendar/AboutUs.html')
-
-
 class EventCalendar(HTMLCalendar):
 
     def __init__(self, events):

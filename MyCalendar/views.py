@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
 from datetime import date, datetime,timedelta
-from itertools import groupby
+
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange
@@ -17,6 +17,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
 from django.http import Http404
+
+from oauth2client import client, crypt
+
 
 #not in use now
 @login_required(login_url=('MyCalendar:login'))
@@ -342,6 +345,7 @@ def loginView(request):
 
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':
+
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
         username = request.POST.get('username')

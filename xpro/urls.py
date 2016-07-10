@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^$', 'MyCalendar.views.loginView'),
     url(r'^admin/', admin.site.urls),
     url(r'^MyCalendar/', include('MyCalendar.urls')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 ]

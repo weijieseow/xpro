@@ -22,11 +22,11 @@ from oauth2client import client, crypt
 
 
 #not in use now
-@login_required(login_url=('MyCalendar:login'))
+@login_required
 def eventView(request):
     return render(request,'MyCalendar/cal_month.html')
 
-@login_required(login_url=('MyCalendar:login'))
+@login_required
 def eventCreateView(request):
     if request.method == "POST":
         form = EventCreateForm(data=request.POST)
@@ -84,7 +84,7 @@ class eventDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:calendar')
 
 
-@login_required(login_url=('MyCalendar:login'))
+@login_required
 def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
@@ -113,7 +113,7 @@ def taskListView(request):
 
 
 
-@login_required(login_url=('MyCalendar:login'))
+@login_required
 def taskCreateView(request):
     if request.method == "POST":
         form = TaskCreateForm(data=request.POST)
@@ -150,11 +150,6 @@ class taskDeleteView(edit.DeleteView):
     model = Task
     template_name = 'MyCalendar/TaskDelete.html'
     success_url = reverse_lazy('MyCalendar:tasklist')
-
-
-@login_required(login_url=('MyCalendar:login'))
-def aboutUsView(request):
-    return render(request, 'MyCalendar/AboutUs.html')
 
 
 class EventCalendar(HTMLCalendar):
@@ -230,7 +225,7 @@ def home(request):
     lToday = datetime.now()
     return calendarView(request, lToday.year, lToday.month)
 
-@login_required(login_url=('MyCalendar:login'))
+@login_required
 def calendarView(request, year=None, month=None):
     """
     Show calendar of events for specified month and year
@@ -281,7 +276,7 @@ def calendarView(request, year=None, month=None):
                                                        'YearAfterThis' : lYearAfterThis,
                                                        'username' : username,
                                                    })
-
+'''
 def registerView(request):
 
     # A boolean value for telling the template whether the registration was successful.
@@ -384,5 +379,5 @@ def logoutView(request):
     logout(request)
     # Redirect to a success page.
     return render(request, 'MyCalendar/successlogout.html')
-
+'''
 

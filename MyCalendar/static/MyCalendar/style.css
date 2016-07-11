@@ -5,8 +5,8 @@
 #calendar table tr th {
     text-align: center;
     font-size: 16px;
-    background-color: #888888;
-    color: white;
+    background-color: whitesmoke;
+    color: rgba(24, 142, 189, 1);
 }
 
 #calendar table tr td {
@@ -26,7 +26,7 @@
 }
 
 #calendar td.today {
-    border: 4px solid #316497;
+    border: 4px solid rgba(24, 142, 189, 1);
 }
 
 #calendar .dayNumber {

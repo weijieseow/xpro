@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^aboutus/', TemplateView.as_view(template_name='AboutUs.html'), name='aboutus'),
     url(r'^admin/', admin.site.urls),
     url(r'^MyCalendar/', include('MyCalendar.urls')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
 ]

@@ -3,17 +3,23 @@
 {% load i18n %}
 
 {% block content %}
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="253040779650-ld74d9equhrscdgmfkctq51lfm5nkv47.apps.googleusercontent.com">
+
     <div class="container-fluid">
         <blockquote>
         <p>“You cannot escape the responsibility of tomorrow by evading it today.”</p>
         <p>― Abraham Lincoln</p>
         </blockquote>
+
         <div class="lead">
             <p>So what are you waiting for?</p>
             <p><a href="{% url 'registration_register' %}">Register</a> an account and get started!</p>
             <p>Or login below:</p>
         </div>
         <br>
+
         <div class="row">
             <div class="col-sm-4 col-md-4">
                 <form method="post" action=".">
@@ -26,7 +32,14 @@
                 <br>
 
                 <p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
+
+
             </div>
         </div>
     </div>
+     <li>
+       <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+     </li>
+
+
 {% endblock %}

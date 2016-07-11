@@ -5,6 +5,11 @@
         <title>Login page</title>
     </head>
 
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="253040779650-ld74d9equhrscdgmfkctq51lfm5nkv47.apps.googleusercontent.com">
+
+
+
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
@@ -28,10 +33,12 @@
                     <form id="login_form" method="POST">
                         {% csrf_token %}
                         <span style="color:grey">
-                            <strong>Username: </strong><input type="text" name="username" value="" size="50" />
+                            <strong>Username: </strong><br>
+                            <input type="text" name="username" value="" size="50" />
                             <br>
                             <br>
-                            <strong>Password: </strong>&nbsp<input type="password" name="password" value="" size="50" />
+                            <strong>Password: </strong><br>
+                            <input type="password" name="password" value="" size="50" />
                             <br>
                             <br>
 
@@ -44,5 +51,17 @@
                 <a href="{% url 'MyCalendar:register' %}">Register Here!</a><br>
             </div>
         </div>
+    <div class="g-signin2" data-onsuccess="onSignIn" ></div>
+    <a href="#" onclick="signOut();">Sign out</a>
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+
+
     </body>
 </html>

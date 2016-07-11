@@ -18,9 +18,6 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy
 from django.http import Http404
 
-from oauth2client import client, crypt
-
-
 #not in use now
 @login_required
 def eventView(request):
@@ -169,8 +166,9 @@ class EventCalendar(HTMLCalendar):
                 body = ['<ul>']
                 for event in self.events[self.year][self.month][day]:
                     body.append('<ol>')
-                    body.append('<a href="%s" style="font-size:small">' % event.get_absolute_url())
+                    body.append('<a href="%s" style="background-color:white; font-size:small">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
+                    body.append('</a>')
                     body.append('</ol>')
                 body.append('</ul>')
                 return self.day_cell(cssclass, '%d %s' % (day, ''.join(body)))

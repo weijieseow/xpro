@@ -289,7 +289,7 @@ def registerView(request):
         # Note that we make use of UserForm
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
-        
+
         # If the two forms are valid...
         if user_form.is_valid():
             # Save the user's form data to the database.

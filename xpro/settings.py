@@ -169,24 +169,17 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST = 'parasite'
-EMAIL_HOST_USER = 'food@stomach.com'
-EMAIL_HOST_PASSWORD = 'default'
-SERVER_EMAIL = 'default'
-DEFAULT_FROM_EMAIL = 'default'
 
 
 SITE_ID = 1
-
-USE_I18N = True
 
 #django-registration redux settings
 ACCOUNT_ACTIVATION_DAYS = 1# One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
-LOGIN_REDIRECT_URL = '/'
-
+LOGIN_REDIRECT_URL ='/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'key'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'himitsu'
+
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/TaskList/'

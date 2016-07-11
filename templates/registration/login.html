@@ -38,16 +38,8 @@
         </div>
     </div>
      <li>
-       <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+       <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
      </li>
-        <a href="#" onclick="signOut();">Sign out</a>
-        <script>
-          function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-              console.log('User signed out.');
-            });
-          }
-        </script>
+
 
 {% endblock %}

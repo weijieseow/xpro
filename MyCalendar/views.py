@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
-from datetime import date, datetime,timedelta
+from datetime import date, datetime, timedelta
 
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc

@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import dj_database_url
 from django.core.mail import send_mail
-
+from hidden_settings import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -169,11 +169,11 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'teamwyxpro@gmail.com'
-EMAIL_HOST_PASSWORD = 'thepassword'
-SERVER_EMAIL = 'teamwyxpro@gmail.com'
-DEFAULT_FROM_EMAIL = 'xpro'
+EMAIL_HOST = 'parasite'
+EMAIL_HOST_USER = 'food@stomach.com'
+EMAIL_HOST_PASSWORD = 'default'
+SERVER_EMAIL = 'default'
+DEFAULT_FROM_EMAIL = 'default'
 
 
 SITE_ID = 1
@@ -181,11 +181,12 @@ SITE_ID = 1
 USE_I18N = True
 
 #django-registration redux settings
-ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+ACCOUNT_ACTIVATION_DAYS = 1# One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
 LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'himitsu'

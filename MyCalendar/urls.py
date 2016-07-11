@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from . import views
-
 from django.contrib.auth import views as auth_views
 
 app_name = 'MyCalendar'
@@ -18,14 +17,8 @@ urlpatterns = [
     # /MyCalendar/event/delete
     url(r'^event/(?P<pk>[0-9]+)/delete/$', views.eventDeleteView.as_view(), name="eventdelete"),
 
-    # /MyCalendar/register
-    #url(r'^register/$', views.registerView, name='register'),
-
-    # /MyCalendar/login
-    #url(r'^login/$', views.loginView, name='login'),
-
     # logout
-    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
+    url(r'^logout/$', auth_views.logout_then_login, name='logout'),
 
     # /MyCalendar/EventCreate
     url(r'^EventCreate/$', views.eventCreateView, name='eventcreate'),

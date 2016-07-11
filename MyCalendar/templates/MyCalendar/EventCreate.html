@@ -3,9 +3,6 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-
-
     <div class="container-fluid">
     <h1>New Event</h1>
 
@@ -31,12 +28,10 @@
         <div>
     </div>
 
-
-    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
     <script>
     $(document).ready(function() {
         $('.datepicker').datepicker();
+        $('.timepicker').wickedpicker({twentyFour: true});
     });
     </script>
 

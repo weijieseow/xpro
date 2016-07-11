@@ -165,4 +165,10 @@ LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+TIME_FORMAT = 'H:i'
+
+TIME_INPUT_FORMATS = (
+    '%H : %M',        # '17 : 59'
+)
+
 

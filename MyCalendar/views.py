@@ -15,8 +15,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse_lazy
-from django.http import Http404
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.http import Http404, HttpResponseRedirect
+
 
 #not in use now
 @login_required

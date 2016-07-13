@@ -170,18 +170,3 @@ ENV/
 *~
 *.swp
 
-.venv
-*.pyc
-staticfiles
-.env
-db.sqlite3
-*.pyc
-*.pyc
-*.pyc
-*.sqlite3
-*.pyc
-*.pyc
-*.pyc
-.idea/xpro.iml
-.idea/misc.xml
-db.sqlite3

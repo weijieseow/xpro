@@ -1,0 +1,14 @@
+{% extends 'MyCalendar/navbar.html' %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <h1>Delete Project Task</h1>
+        <form id="project_task_delete" action ="" method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <input type="submit" class="btn btn-default" value="Confirm" />
+        <a href="{% url 'MyCalendar:project_tasklist' project_id %}" class="btn btn-default">No</a>
+        </form>
+    </div>
+
+{% endblock %}

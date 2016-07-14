@@ -1,7 +1,7 @@
 from django.views.generic import edit
 
-from .models import Event, Task
-from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm
+from .models import Event, Task, Project, ProjectTask
+from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import Http404
 
 #not in use now
@@ -85,25 +85,39 @@ class eventDeleteView(edit.DeleteView):
 def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
     overdue_tasks = []
     current_tasks = []
+    overdue_projects = []
+    current_projects = []
+
     for task in user_tasks:
         if task.task_date >= date.today():
             current_tasks.append(task)
         else:
             overdue_tasks.append(task)
 
-
+    for project in user_projects:
+        if project.project_date >= date.today():
+            current_projects.append(project)
+        else:
+            overdue_projects.append(project)
 
     date_today = date.today()
     number_of_current_tasks = len(current_tasks)
     number_of_overdue_tasks = len(overdue_tasks)
+    number_of_current_projects = len(current_projects)
+    number_of_overdue_projects = len(overdue_projects)
 
     context = {'current_tasks': current_tasks,
                'number_of_current_tasks': number_of_current_tasks,
                'overdue_tasks': overdue_tasks,
                'number_of_overdue_tasks': number_of_overdue_tasks,
-               'date_today': date_today
+               'date_today': date_today,
+               'current_projects': current_projects,
+               'number_of_current_projects': number_of_current_projects,
+               'overdue_projects': overdue_projects,
+               'number_of_overdue_projects': number_of_overdue_projects,
     }
 
     return render(request, 'MyCalendar/TasksView.html', context)
@@ -149,6 +163,115 @@ class taskDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
+@login_required
+def projectCreateView(request):
+    if request.method == "POST":
+        form = ProjectCreateForm(data=request.POST)
+        if form.is_valid():
+            project_without_user = form.save(commit=False)
+            project_without_user.user = request.user
+            form.save()
+
+            return redirect('MyCalendar:tasklist')
+
+    else:
+        form = ProjectCreateForm()
+
+    return render(request, 'MyCalendar/ProjectCreate.html', {'form': form})
+
+
+@login_required
+def projectTaskListView(request, project_id):
+
+    current_project = Project.objects.get(pk=project_id)
+    project_tasks = ProjectTask.objects.filter(project=current_project).order_by('project_task_date')
+
+    overdue_project_tasks = []
+    current_project_tasks = []
+
+
+    for task in project_tasks:
+        if task.project_task_date >= date.today():
+            current_project_tasks.append(task)
+        else:
+            overdue_project_tasks.append(task)
+
+    date_today = date.today()
+    number_of_current_tasks = len(current_project_tasks)
+    number_of_overdue_tasks = len(overdue_project_tasks)
+
+    context = {'current_project_tasks': current_project_tasks,
+               'number_of_current_tasks': number_of_current_tasks,
+               'overdue_project_tasks': overdue_project_tasks,
+               'number_of_overdue_tasks': number_of_overdue_tasks,
+               'date_today': date_today,
+               'project_id': project_id,
+    }
+
+    return render(request, 'MyCalendar/ProjectTasksView.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+class projectDeleteView(edit.DeleteView):
+    model = Project
+    template_name = 'MyCalendar/ProjectDelete.html'
+    success_url = reverse_lazy('MyCalendar:tasklist')
+
+
+
+@login_required
+def projectTaskCreateView(request, project_id):
+
+    current_project = Project.objects.get(pk=project_id)
+
+    if request.method == "POST":
+        form = ProjectTaskCreateForm(data=request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.project = current_project
+            form.save()
+
+            return redirect('MyCalendar:project_tasklist', project_id)
+
+    else:
+        form = ProjectTaskCreateForm()
+
+    return render(request, 'MyCalendar/ProjectTaskCreate.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class projectTaskUpdateView(edit.UpdateView):
+    model = ProjectTask
+    form_class = ProjectTaskCreateForm
+    template_name = 'MyCalendar/ProjectTaskUpdate.html'
+
+
+    def get(self, request, pk, **kwargs):
+        if request.user != self.get_object().project.user:
+            raise Http404('Project Task does not exist.')
+        else:
+            return self.post(self, request)
+
+
+@method_decorator(login_required, name='dispatch')
+class projectTaskDeleteView(edit.DeleteView):
+    model = ProjectTask
+    template_name = 'MyCalendar/ProjectTaskDelete.html'
+
+    def get_success_url(self):
+        return reverse('MyCalendar:project_tasklist', kwargs={'project_id': self.object.project.pk})
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(projectTaskDeleteView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['project_id'] = self.get_object().project.pk
+
+        return context
+
+
+
+
 class EventCalendar(HTMLCalendar):
 
     def __init__(self, events):
@@ -166,7 +289,7 @@ class EventCalendar(HTMLCalendar):
                 body = ['<ul>']
                 for event in self.events[self.year][self.month][day]:
                     body.append('<ol>')
-                    body.append('<a href="%s" style="background-color:white; font-size:small">' % event.get_absolute_url())
+                    body.append('<a href="%s" style="color:white; font-size:small">' % event.get_absolute_url())
                     body.append(esc(event.event_name))
                     body.append('</a>')
                     body.append('</ol>')

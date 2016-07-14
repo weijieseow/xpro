@@ -1,0 +1,32 @@
+{% extends 'MyCalendar/navbar.html' %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
+    <div class="container-fluid">
+        <h1>Update Project Task</h1>
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+                <form id="project_task_update_form" method="POST">
+                    {% csrf_token %}
+
+                    {{ form|crispy }}
+
+                    <input type="submit" name="update" class="btn btn-default" value="Update">
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker();
+    });
+    </script>
+
+{% endblock %}

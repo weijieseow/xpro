@@ -1,3 +1,4 @@
+/* navbar color scheme */
 #custom-bootstrap-menu.navbar-custom .navbar-brand {
     color: rgba(255, 255, 255, 1);
 }
@@ -60,7 +61,7 @@
   border-color: #ddd;
 }
 
-
+/* buttons style */
 a {
   text-decoration: none;
 }
@@ -104,4 +105,13 @@ a {
 }
 .ff_btn:hover {
   background: #000;
+}
+
+a.ff_btn {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+
+    text-decoration: none;
+    color: white;
 }

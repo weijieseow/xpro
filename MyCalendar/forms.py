@@ -22,7 +22,9 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ['bio']
+class FullUserProfileForm(UserProfileForm):
+    class Meta:
+        model = User
 
 
 class EventCreateForm(forms.ModelForm):

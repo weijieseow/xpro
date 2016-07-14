@@ -1,11 +1,18 @@
 from django.contrib.auth.views import login
-from django.http import HttpResponseRedirect
-from django.conf.urls import url
+
+from django.shortcuts import render, redirect
+
 
 
 def custom_login(request, **kwargs):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(url('MyCalendar:TaskList'))
+        return redirect('MyCalendar:tasklist')
     else:
         return login(request, **kwargs)
 
+
+def index_view(request):
+    if request.user.is_authenticated():
+        return redirect('MyCalendar:tasklist')
+    else:
+        return render(request, 'index.html')

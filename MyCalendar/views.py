@@ -19,10 +19,10 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import Http404, HttpResponseRedirect
 
 
-#not in use now
-@login_required
-def eventView(request):
-    return render(request,'MyCalendar/cal_month.html')
+
+
+
+
 
 @login_required
 def eventCreateView(request):

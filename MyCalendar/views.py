@@ -16,12 +16,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 
-#not in use now
-@login_required
-def eventView(request):
-    return render(request,'MyCalendar/cal_month.html')
+
 
 @login_required
 def eventCreateView(request):
@@ -410,7 +407,7 @@ def registerView(request):
         # Note that we make use of UserForm
         user_form = UserForm(data=request.POST)
         profile_form = UserProfileForm(data=request.POST)
-        
+
         # If the two forms are valid...
         if user_form.is_valid():
             # Save the user's form data to the database.

@@ -46,26 +46,31 @@ class Task(models.Model):
     def get_absolute_url(self):
         return "/MyCalendar/task/%i/" % self.pk
 
-'''
-class AGroup(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    members = models.ManyToManyField(Model)
-    group_name = models.CharField(max_length=255)
 
-    description = models.TextField(blank=True)
-
-
-    def __str__(self):
-        return self.group_name
-
-
-class GroupTask(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(AGroup)
-    task_name = models.CharField(max_length=255)
-    task_date = models.DateField(null=True, default=date.today())
+class Project(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project_name = models.CharField(max_length=255)
+    project_date = models.DateField(null=True, default=date.today())
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return self.task_name
-'''
+        return self.project_name
+
+    def get_absolute_url(self):
+        return "/MyCalendar/TaskList/project/%i/" % self.pk
+
+
+class ProjectTask(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project_task_name = models.CharField(max_length=255)
+    project_task_date = models.DateField(null=True, default=date.today())
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.project_task_name
+
+    def get_absolute_url(self):
+        return "/MyCalendar/TaskList/project/%i/" % self.project.pk
+
+
+

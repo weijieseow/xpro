@@ -27,12 +27,29 @@ urlpatterns = [
     url(r'^TaskList/$', views.taskListView, name='tasklist'),
 
     # /MyCalendar/TaskCreate
-    url(r'^TaskCreate/$', views.taskCreateView, name='taskcreate'),
+    url(r'^TaskList/TaskCreate/$', views.taskCreateView, name='taskcreate'),
 
     # /MyCalendar/task/#pk
-    url(r'^task/(?P<pk>[0-9]+)/$', views.taskUpdateView.as_view(), name="taskupdate"),
+    url(r'^TaskList/task/(?P<pk>[0-9]+)/$', views.taskUpdateView.as_view(), name="taskupdate"),
 
     # /MyCalendar/task/#pk/delete
-    url(r'^task/(?P<pk>[0-9]+)/delete/$', views.taskDeleteView.as_view(), name="taskdelete"),
+    url(r'^TaskList/task/(?P<pk>[0-9]+)/delete/$', views.taskDeleteView.as_view(), name="taskdelete"),
 
+    # /MyCalendar/ProjectCreate
+    url(r'^TaskList/ProjectCreate/$', views.projectCreateView, name='projectcreate'),
+
+    # /MyCalendar/project/#pk/delete
+    url(r'^TaskList/project/(?P<pk>[0-9]+)/delete/$', views.projectDeleteView.as_view(), name="projectdelete"),
+
+    # /MyCalendar/project#pk
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/$', views.projectTaskListView, name="project_tasklist"),
+
+    # /MyCalendar/project/ProjectTaskCreate
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/ProjectTaskCreate/$', views.projectTaskCreateView, name='project_taskcreate'),
+
+    # /MyCalendar/project/ptask/#pk/update
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/(?P<pk>[0-9]+)/update/$', views.projectTaskUpdateView.as_view(), name="project_taskupdate"),
+
+    # /MyCalendar/project/ptask/#pk/delete
+    url(r'^TaskList/project/(?P<proj>[0-9]+)/(?P<pk>[0-9]+)/delete/$', views.projectTaskDeleteView.as_view(), name="project_taskdelete"),
 ]

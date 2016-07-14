@@ -6,7 +6,7 @@
     text-align: center;
     font-size: 16px;
     background-color: whitesmoke;
-    color: rgba(24, 142, 189, 1);
+    color: grey;
 }
 
 #calendar table tr td {
@@ -22,11 +22,11 @@
 }
 
 #calendar td.filled {
-    background-color: lightgray;
+    background-color: #5bc0de;
 }
 
 #calendar td.today {
-    border: 4px solid rgba(24, 142, 189, 1);
+    border: 4px solid grey;
 }
 
 #calendar .dayNumber {

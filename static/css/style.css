@@ -5,7 +5,7 @@
     font-size: 14px;
     background-color: rgba(24, 142, 189, 1);
     border-width: 0px;
-    border-radius: 6px;
+    border-radius: 0px;
 }
 #custom-bootstrap-menu.navbar-custom .navbar-nav>li>a {
     color: rgba(255, 255, 255, 1);
@@ -47,4 +47,18 @@
     width: 100%;
     z-index:10;
 }
+
+.panel-body {
+  color: white;
+  background-color: white;
+  border-color: #ddd;
+}
+
+.panel-footer {
+  color: white;
+  background-color: white;
+  border-color: #ddd;
+}
+
+
 

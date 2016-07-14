@@ -6,8 +6,8 @@
         <h1>Delete Event</h1>
         <form id="event_delete" action ="" method="post">{% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
-        <input type="submit" class="btn btn-default" value="Confirm" />
-        <a href="{% url 'MyCalendar:calendar' %}" class="btn btn-default">No</a>
+        <input type="submit" class="ff_btn btn_grey" value="Confirm" />
+        <a href="{% url 'MyCalendar:calendar' %}" class="ff_btn btn_grey">No</a>
         </form>
     </div>
 {% endblock %}

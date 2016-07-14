@@ -4,7 +4,7 @@
 
     <div class="container-fluid">
 
-        <a href="{% url 'MyCalendar:project_taskcreate' project_id %}" class="btn btn-default">New Project Task</a>
+        <a href="{% url 'MyCalendar:project_taskcreate' project_id %}" class="ff_btn btn_blue">New Project Task</a>
 
     <div class="container-fluid">
         {% if overdue_project_tasks %}
@@ -35,8 +35,8 @@
                                 </pre>
                             </div>
                             <div class="panel-footer">
-                                <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                                <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                                <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                             </div>
                         </div>
                     </div>
@@ -73,8 +73,8 @@
                             </pre>
                         </div>
                         <div class="panel-footer">
-                            <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                            <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                            <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                            <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                         </div>
                     </div>
                 </div>

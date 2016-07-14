@@ -2,22 +2,13 @@
 {% load l10n %}
 
 {% block body %}
-    <style>
-        #div1 {
-            z-index: 1;
-        }
-
-        img {
-            z-index: -1;
-        }
-    </style>
 
     <div id="div1" class="container-fluid">
-        <a href="{% url 'MyCalendar:taskcreate' %}" class="btn btn-default">New Task</a>
-        <a href="{% url 'MyCalendar:projectcreate' %}" class="btn btn-default">New Project</a>
+        <a href="{% url 'MyCalendar:taskcreate' %}" class="ff_btn btn_blue">New Task</a>
+        <a href="{% url 'MyCalendar:projectcreate' %}" class="ff_btn btn_blue">New Project</a>
         <div class="container-fluid">
             {% if overdue_tasks or overdue_projects %}
-                <h1> Overdue -
+                <h2> Overdue -
                     {% if number_of_overdue_tasks > 1 %}
                         {{ number_of_overdue_tasks }} tasks,
                     {% elif number_of_overdue_tasks <= 1 %}
@@ -29,7 +20,7 @@
                     {% elif number_of_overdue_projects <= 1 %}
                         {{ number_of_overdue_projects }} project
                     {% endif %}
-                </h1>
+                </h2>
                 <ol>
 
                     {% for task in overdue_tasks %}
@@ -38,19 +29,21 @@
                             <div class="panel panel-danger">
                               <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }} - {{ task.task_date|localize }}</a>
+                                    <a data-toggle="collapse" href="#task{{ task.pk }}">
+                                        <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date|localize }}</span>
+                                    </a>
                                 </h4>
                               </div>
 
                              <div id="task{{ task.pk }}" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <pre style="background-color: white">
-    {{ task.description }}
+{{ task.description }}
                                     </pre>
                                 </div>
                                 <div class="panel-footer">
-                                    <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +56,7 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                        <span class="glyphicon glyphicon-education"></span>&nbsp{{ project }} - {{ project.project_date }}
+                                        <span class="glyphicon glyphicon-education">&nbsp{{ project }} - {{ project.project_date }}</span>
                                     </a>
                                 </h4>
                               </div>
@@ -75,9 +68,9 @@
                                     </pre>
                                 </div>
                                 <div class="panel-footer">
-                                    <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                                    <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="btn btn-default"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                    <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
+                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +83,7 @@
 
         <div class="container-fluid">
             {% if current_tasks or current_projects%}
-                <h1> Current -
+                <h2> Current -
                 {% if number_of_current_tasks > 1 %}
                     {{ number_of_current_tasks }} tasks,
                 {% elif number_of_current_tasks <= 1 %}
@@ -102,7 +95,7 @@
                 {% elif number_of_current_projects <= 1 %}
                     {{ number_of_current_projects }} project
                 {% endif %}
-                </h1>
+                </h2>
 
             <ol>
                 {% for task in current_tasks %}
@@ -111,7 +104,9 @@
                         <div class="panel panel-info">
                           <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }} - {{ task.task_date }}</a>
+                                <a data-toggle="collapse" href="#{{ task.pk }}">
+                                    <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date }}</span>
+                                </a>
                             </h4>
                           </div>
                         <div id="{{ task.pk }}" class="panel-collapse collapse">
@@ -121,8 +116,8 @@
                                 </pre>
                             </div>
                             <div class="panel-footer">
-                                <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                                <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                                <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                             </div>
                         </div>
                     </div>
@@ -147,9 +142,9 @@
                                 </pre>
                             </div>
                             <div class="panel-footer">
-                                    <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="btn btn-default"><span style="font-size:small">Update</span></a>
-                                    <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="btn btn-default"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="btn btn-default"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                    <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
+                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                             </div>
                         </div>
                     </div>

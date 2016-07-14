@@ -1,12 +1,16 @@
 from django.conf.urls import url
 from . import views
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 app_name = 'MyCalendar'
 
 urlpatterns = [
     # /MyCalendar/
     url(r'^$', views.calendarView, name='calendar'),
+
+    # /MyCalendar/home
+    url(r'^home/$', TemplateView.as_view(template_name='MyCalendar/home.html'), name='home'),
 
     # /MyCalendar/calendar
     url(r'^calendar/([0-9]{4})/([0-9]+)/$', views.calendarView, name='calendar'),
@@ -37,6 +41,9 @@ urlpatterns = [
 
     # /MyCalendar/ProjectCreate
     url(r'^TaskList/ProjectCreate/$', views.projectCreateView, name='projectcreate'),
+
+    # /MyCalendar/project/#pk/delete
+    url(r'^TaskList/project/(?P<pk>[0-9]+)/update/$', views.projectUpdateView.as_view(), name="projectupdate"),
 
     # /MyCalendar/project/#pk/delete
     url(r'^TaskList/project/(?P<pk>[0-9]+)/delete/$', views.projectDeleteView.as_view(), name="projectdelete"),

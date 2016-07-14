@@ -184,6 +184,9 @@ TIME_INPUT_FORMATS = (
     '%H : %M',        # '17 : 59'
 )
 
+DATE_FORMAT = 'F j Y'
+
+DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/TaskList/'

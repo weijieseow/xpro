@@ -1,7 +1,7 @@
 from django.views.generic import edit
 
 from .models import Event, Task, Project, ProjectTask
-from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
+from .forms import UserProfileForm, EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
@@ -176,6 +176,19 @@ def projectCreateView(request):
 
     return render(request, 'MyCalendar/ProjectCreate.html', {'form': form})
 
+@method_decorator(login_required, name='dispatch')
+class projectUpdateView(edit.UpdateView):
+    model = Project
+    form_class = ProjectCreateForm
+    success_url = reverse_lazy("MyCalendar:tasklist")
+    template_name = 'MyCalendar/ProjectUpdate.html'
+
+
+    def get(self, request, pk, **kwargs):
+        if request.user != self.get_object().user:
+            raise Http404('Project does not exist.')
+        else:
+            return self.post(self, request)
 
 @login_required
 def projectTaskListView(request, project_id):

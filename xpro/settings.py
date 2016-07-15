@@ -176,7 +176,7 @@ SITE_ID = 1
 ACCOUNT_ACTIVATION_DAYS = 1# One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
-LOGIN_REDIRECT_URL ='MyCalendar:TaskList'
+LOGIN_REDIRECT_URL ='MyCalendar:home'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 TIME_FORMAT = 'H:i'
@@ -185,6 +185,8 @@ TIME_INPUT_FORMATS = (
     '%H : %M',        # '17 : 59'
 )
 
+DATE_FORMAT = 'F j Y'
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/TaskList/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'

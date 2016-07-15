@@ -13,8 +13,8 @@
 
                     {{ form|crispy }}
 
-                    <input class="btn btn-default" type="submit" name="update" value="Update">
-                    <a href="{% url 'MyCalendar:eventdelete' object.pk %}" class="btn btn-default">Delete</a>
+                    <input class="ff_btn btn_grey" type="submit" name="update" value="Update">
+                    <a class="ff_btn btn_grey" href="{% url 'MyCalendar:eventdelete' object.pk %}">Delete</a>
                 </form>
             </div>
         </div>

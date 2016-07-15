@@ -1,8 +1,8 @@
 from django.views.generic import edit
 
-from .models import Event, Task, Project, ProjectTask
-from .forms import UserForm, UserProfileForm, EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-from django.contrib.auth.models import User
+from .models import Event, Task, Project, ProjectTask, UserProfile
+from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
+#from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
@@ -22,6 +22,7 @@ from django.http import Http404, HttpResponseRedirect
 
 @login_required
 def eventCreateView(request):
+    profile = request.user.userprofile
     if request.method == "POST":
         form = EventCreateForm(data=request.POST)
         if form.is_valid():
@@ -31,7 +32,7 @@ def eventCreateView(request):
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
-                              {'form': form, 'end_date': end_date, 'start_date': start_date})
+                              {'form': form, 'end_date': end_date, 'start_date': start_date, 'profile': profile})
 
             elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
                     and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
@@ -43,7 +44,7 @@ def eventCreateView(request):
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_time': end_time, 'start_time': start_time,
-                               'end_date': end_date, 'start_date': start_date})
+                               'end_date': end_date, 'start_date': start_date, 'profile': profile})
 
             event_without_user = form.save(commit=False)
             event_without_user.user = request.user
@@ -53,7 +54,7 @@ def eventCreateView(request):
 
     else:
         form = EventCreateForm()
-    return render(request, 'MyCalendar/EventCreate.html', {'form': form})
+    return render(request, 'MyCalendar/EventCreate.html', {'form': form, 'profile': profile})
 
 
 
@@ -70,6 +71,14 @@ class eventUpdateView(edit.UpdateView):
         else:
             return self.post(self, request)
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(eventUpdateView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
 
 @method_decorator(login_required, name='dispatch')
 class eventDeleteView(edit.DeleteView):
@@ -78,11 +87,22 @@ class eventDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:calendar')
 
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(eventDeleteView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
+
 @login_required
 def taskListView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
     user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
+    profile = user.userprofile
+
     overdue_tasks = []
     current_tasks = []
     overdue_projects = []
@@ -115,7 +135,8 @@ def taskListView(request):
                'number_of_current_projects': number_of_current_projects,
                'overdue_projects': overdue_projects,
                'number_of_overdue_projects': number_of_overdue_projects,
-    }
+               'profile': profile
+               }
 
     return render(request, 'MyCalendar/TasksView.html', context)
 
@@ -123,6 +144,7 @@ def taskListView(request):
 
 @login_required
 def taskCreateView(request):
+    profile = request.user.userprofile
     if request.method == "POST":
         form = TaskCreateForm(data=request.POST)
         if form.is_valid():
@@ -135,7 +157,7 @@ def taskCreateView(request):
     else:
         form = TaskCreateForm()
 
-    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
+    return render(request, 'MyCalendar/TaskCreate.html', {'form': form, 'profile': profile})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -153,6 +175,15 @@ class taskUpdateView(edit.UpdateView):
             return self.post(self, request)
 
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(taskUpdateView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class taskDeleteView(edit.DeleteView):
     model = Task
@@ -160,8 +191,18 @@ class taskDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(taskDeleteView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
+
 @login_required
 def projectCreateView(request):
+    profile = request.user.userprofile
     if request.method == "POST":
         form = ProjectCreateForm(data=request.POST)
         if form.is_valid():
@@ -174,18 +215,20 @@ def projectCreateView(request):
     else:
         form = ProjectCreateForm()
 
-    return render(request, 'MyCalendar/ProjectCreate.html', {'form': form})
+    return render(request, 'MyCalendar/ProjectCreate.html', {'form': form, 'profile': profile})
 
 
 @login_required
 def projectTaskListView(request, project_id):
-
+    profile = request.user.userprofile
     current_project = Project.objects.get(pk=project_id)
     project_tasks = ProjectTask.objects.filter(project=current_project).order_by('project_task_date')
 
     overdue_project_tasks = []
     current_project_tasks = []
 
+    if request.user != current_project.user:
+        raise Http404('Project does not exist.')
 
     for task in project_tasks:
         if task.project_task_date >= date.today():
@@ -203,7 +246,8 @@ def projectTaskListView(request, project_id):
                'number_of_overdue_tasks': number_of_overdue_tasks,
                'date_today': date_today,
                'project_id': project_id,
-    }
+               'profile': profile
+               }
 
     return render(request, 'MyCalendar/ProjectTasksView.html', context)
 
@@ -215,10 +259,18 @@ class projectDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(projectDeleteView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
 
 @login_required
 def projectTaskCreateView(request, project_id):
-
+    profile = request.user.userprofile
     current_project = Project.objects.get(pk=project_id)
 
     if request.method == "POST":
@@ -233,7 +285,7 @@ def projectTaskCreateView(request, project_id):
     else:
         form = ProjectTaskCreateForm()
 
-    return render(request, 'MyCalendar/ProjectTaskCreate.html', {'form': form})
+    return render(request, 'MyCalendar/ProjectTaskCreate.html', {'form': form, 'profile': profile})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -250,6 +302,15 @@ class projectTaskUpdateView(edit.UpdateView):
             return self.post(self, request)
 
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(projectTaskUpdateView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['profile'] = self.request.user.userprofile
+
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class projectTaskDeleteView(edit.DeleteView):
     model = ProjectTask
@@ -263,7 +324,7 @@ class projectTaskDeleteView(edit.DeleteView):
         context = super(projectTaskDeleteView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['project_id'] = self.get_object().project.pk
-
+        context['profile'] = self.request.user.userprofile
         return context
 
 
@@ -349,6 +410,7 @@ def calendarView(request, year=None, month=None):
     Show calendar of events for specified month and year
     """
     if request.user.is_authenticated():
+        profile = request.user.userprofile
         username = request.user.username
     else:
         return redirect('MyCalendar:login')
@@ -381,121 +443,18 @@ def calendarView(request, year=None, month=None):
     lYearBeforeThis = lYear - 1
 
     return render(request, 'MyCalendar/cal_month.html', {'Calendar': mark_safe(lCalendar),
-                                                       'Month' : lMonth,
-                                                       'MonthName' : named_month(lMonth),
-                                                       'Year' : lYear,
-                                                       'PreviousMonth' : lPreviousMonth,
-                                                       'PreviousMonthName' : named_month(lPreviousMonth),
-                                                       'PreviousYear' : lPreviousYear,
-                                                       'NextMonth' : lNextMonth,
-                                                       'NextMonthName' : named_month(lNextMonth),
-                                                       'NextYear' : lNextYear,
-                                                       'YearBeforeThis' : lYearBeforeThis,
-                                                       'YearAfterThis' : lYearAfterThis,
-                                                       'username' : username,
-                                                   })
-'''
-def registerView(request):
-
-    # A boolean value for telling the template whether the registration was successful.
-    # Set to False initially. Code changes value to True when registration succeeds.
-    registered = False
-
-    # If it's a HTTP POST, we're interested in processing form data.
-    if request.method == 'POST':
-        # Attempt to grab information from the raw form information.
-        # Note that we make use of UserForm
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-
-        # If the two forms are valid...
-        if user_form.is_valid():
-            # Save the user's form data to the database.
-            user = user_form.save()
-
-            # Now we hash the password with the set_password method.
-            # Once hashed, we can update the user object.
-            user.set_password(user.password)
-            user.save()
-
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
-            profile = profile_form.save(commit=False)
-            profile.user = user
-
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-
-            # Now we save the UserProfile model instance.
-            profile.save()
-
-            # Update our variable to tell the template registration was successful.
-            registered = True
-
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
-        else:
-            print(user_form.errors, profile_form.errors)
-
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-
-    # Render the template depending on the context.
-    return render(
-            request, 'MyCalendar/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
-
-def loginView(request):
-    # Like before, obtain the context for the user's request.
-
-    # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
-
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
-        user = authenticate(username=username, password=password)
-
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
-        if user is not None:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
-                login(request, user)
-                return redirect('MyCalendar:tasklist')
-            else:
-                # An inactive account was used - no logging in!
-                return HttpResponse("Your X-Pro account is disabled.")
-        else:
-            # Bad login details were provided. So we can't log the user in.
-            print("Invalid login details: {0}, {1}".format(username, password))
-            return render(request, 'MyCalendar/login.html', {'user' : user})
-
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
-    else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
-        return render(request, 'MyCalendar/login.html')
-
-def logoutView(request):
-    logout(request)
-    # Redirect to a success page.
-    return render(request, 'MyCalendar/successlogout.html')
-'''
+                                                         'Month' : lMonth,
+                                                         'MonthName' : named_month(lMonth),
+                                                         'Year' : lYear,
+                                                         'PreviousMonth' : lPreviousMonth,
+                                                         'PreviousMonthName' : named_month(lPreviousMonth),
+                                                         'PreviousYear' : lPreviousYear,
+                                                         'NextMonth' : lNextMonth,
+                                                         'NextMonthName' : named_month(lNextMonth),
+                                                         'NextYear' : lNextYear,
+                                                         'YearBeforeThis' : lYearBeforeThis,
+                                                         'YearAfterThis' : lYearAfterThis,
+                                                         'username': username,
+                                                         'profile': profile
+                                                         })
 

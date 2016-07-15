@@ -52,4 +52,6 @@ urlpatterns = [
 
     # /MyCalendar/project/ptask/#pk/delete
     url(r'^TaskList/project/(?P<proj>[0-9]+)/(?P<pk>[0-9]+)/delete/$', views.projectTaskDeleteView.as_view(), name="project_taskdelete"),
+
+
 ]

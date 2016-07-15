@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib import admin
-from xpro.views import custom_login, index_view
+from xpro.views import custom_login, index_view, change_email, change_display_name
 
 urlpatterns = [
     url(r'^$', index_view, name='home'),
@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'^accounts/login/$', custom_login, name='login'),
 
     url(r'^accounts/', include('registration.backends.hmac.urls')),
+
+    url(r'^change_email', change_email, name='changeemail'),
+    url(r'^change_display_name', change_display_name, name='changedisplayname'),
 
 ]

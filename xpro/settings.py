@@ -129,6 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -188,5 +189,8 @@ DATE_FORMAT = 'F j Y'
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
+<<<<<<< HEAD
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'
+
+

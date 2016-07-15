@@ -1,15 +1,11 @@
 from django.views.generic import edit
 from .models import Event, Task, Project, ProjectTask
-from .forms import UserProfileForm, EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
+from .forms import  EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
 from django.contrib.auth.models import User
-from .models import Event, Task, Project, ProjectTask, UserProfile
-from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-#from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
 from datetime import date, datetime, timedelta
-
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange

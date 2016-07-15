@@ -189,8 +189,6 @@ DATE_FORMAT = 'F j Y'
 
 DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
-<<<<<<< HEAD
-
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'
 
 

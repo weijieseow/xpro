@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     #third party apps
     'crispy_forms',
     #own apps
-    'hidden_settings',
     'MyCalendar.apps.MycalendarConfig',
 ]
 

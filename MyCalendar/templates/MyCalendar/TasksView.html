@@ -1,11 +1,13 @@
 {% extends 'MyCalendar/navbar.html' %}
-{% load l10n %}
 
 {% block body %}
 
-    <div id="div1" class="container-fluid">
-        <a href="{% url 'MyCalendar:taskcreate' %}" class="ff_btn btn_blue">New Task</a>
-        <a href="{% url 'MyCalendar:projectcreate' %}" class="ff_btn btn_blue">New Project</a>
+    <div class="container-fluid">
+        <div class="col-md--4">
+        <a class="ff_btn btn_blue" href="{% url 'MyCalendar:taskcreate' %}">New Task</a>
+        <a class="ff_btn btn_blue" href="{% url 'MyCalendar:projectcreate' %}">New Project</a>
+        </div>
+
         <div class="container-fluid">
             {% if overdue_tasks or overdue_projects %}
                 <h2> Overdue -
@@ -30,7 +32,7 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#task{{ task.pk }}">
-                                        <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date|localize }}</span>
+                                        {{ task }} - {{ task.task_date }}
                                     </a>
                                 </h4>
                               </div>
@@ -56,7 +58,7 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                        <span class="glyphicon glyphicon-education">&nbsp{{ project }} - {{ project.project_date }}</span>
+                                        <span class="glyphicon glyphicon-book"></span>{{ project }} - {{ project.project_date }}
                                     </a>
                                 </h4>
                               </div>
@@ -105,7 +107,7 @@
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#{{ task.pk }}">
-                                    <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date }}</span>
+                                    {{ task }} - {{ task.task_date }}
                                 </a>
                             </h4>
                           </div>
@@ -130,7 +132,7 @@
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                    <span class="glyphicon glyphicon-education">&nbsp{{ project }} - {{ project.project_date }}</span>
+                                    <span class="glyphicon glyphicon-book"></span>&nbsp{{ project }} - {{ project.project_date }}
                                 </a>
                             </h4>
                           </div>

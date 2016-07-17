@@ -3,8 +3,8 @@
 {% block body %}
 
     <div class="container-fluid">
-        <h1>Delete Task</h1>
-        <form id="task_delete" action ="" method="post">{% csrf_token %}
+        <h1>Delete Project</h1>
+        <form id="project_delete" action ="" method="post">{% csrf_token %}
         <p>Are you sure you want to delete "{{ object }}"?</p>
         <input type="submit" class="ff_btn btn_grey" value="Confirm" />
         <a href="{% url 'MyCalendar:tasklist' %}" class="ff_btn btn_grey">No</a>

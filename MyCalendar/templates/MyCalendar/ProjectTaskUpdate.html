@@ -5,17 +5,16 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
-
     <div class="container-fluid">
-        <h1>New task</h1>
+        <h1>Update Project Task</h1>
         <div class="row">
             <div class="col-sm-6 col-md-4">
-                <form id="task_create_form" method="POST">
+                <form id="project_task_update_form" method="POST">
                     {% csrf_token %}
 
                     {{ form|crispy }}
 
-                    <input type="submit" class="ff_btn btn_grey" name="submit" value="Create" />
+                    <input type="submit" name="update" class="ff_btn btn_grey" value="Update">
                 </form>
             </div>
         </div>
@@ -24,7 +23,6 @@
 
     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-
     <script>
     $(document).ready(function() {
         $('.datepicker').datepicker();

@@ -16,12 +16,21 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.contrib import admin
+from xpro.views import custom_login, index_view, change_email, change_display_name
 
 urlpatterns = [
-    url(r'^$', 'django.contrib.auth.views.login'),
+    url(r'^$', index_view, name='home'),
     url(r'^aboutus/', TemplateView.as_view(template_name='AboutUs.html'), name='aboutus'),
     url(r'^admin/', admin.site.urls),
     url(r'^MyCalendar/', include('MyCalendar.urls')),
     url('', include('social.apps.django_app.urls', namespace='social')),
+
+    # To stop logged in users from accessing login page
+    url(r'^accounts/login/$', custom_login, name='login'),
+
     url(r'^accounts/', include('registration.backends.hmac.urls')),
+
+    url(r'^change_email', change_email, name='changeemail'),
+    url(r'^change_display_name', change_display_name, name='changedisplayname'),
+
 ]

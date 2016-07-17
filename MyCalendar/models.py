@@ -1,21 +1,23 @@
 from __future__ import unicode_literals
-
+from django.db.models.signals import post_save
 from django.db import models
 from datetime import date, timedelta
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
 
 class UserProfile(models.Model):
-    # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=30, default='Set a Display Name here!')
 
-    # The additional attributes we wish to include.
-    bio = models.TextField(blank=True)
-
-    # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
-        return self.user.username
+        return self.display_name
 
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,9 +28,7 @@ class Event(models.Model):
                                 help_text='The end date must be later than the start date')
     end_time = models.TimeField(null=True, help_text='The end must be later than the start ')
 
-
     description = models.TextField(blank=True)
-
 
     def __str__(self):
         return self.event_name
@@ -49,26 +49,31 @@ class Task(models.Model):
     def get_absolute_url(self):
         return "/MyCalendar/task/%i/" % self.pk
 
-'''
-class AGroup(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    members = models.ManyToManyField(Model)
-    group_name = models.CharField(max_length=255)
 
-    description = models.TextField(blank=True)
-
-
-    def __str__(self):
-        return self.group_name
-
-
-class GroupTask(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(AGroup)
-    task_name = models.CharField(max_length=255)
-    task_date = models.DateField(null=True, default=date.today())
+class Project(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    project_name = models.CharField(max_length=255)
+    project_date = models.DateField(null=True, default=date.today())
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return self.task_name
-'''
+        return self.project_name
+
+    def get_absolute_url(self):
+        return "/MyCalendar/TaskList/project/%i/" % self.pk
+
+
+class ProjectTask(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project_task_name = models.CharField(max_length=255)
+    project_task_date = models.DateField(null=True, default=date.today())
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.project_task_name
+
+    def get_absolute_url(self):
+        return "/MyCalendar/TaskList/project/%i/" % self.project.pk
+
+
+

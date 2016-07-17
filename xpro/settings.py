@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'social.apps.django_app.default',
     #third party apps
     'crispy_forms',
@@ -77,7 +76,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTHENTICATION_BACKENDS = (
    'social.backends.facebook.FacebookOAuth2',
    'social.backends.google.GoogleOAuth2',
-   'social.backends.twitter.TwitterOAuth',
    'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -131,6 +129,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -152,12 +151,12 @@ DATABASES['default'].update(db_from_env)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 # Simplified static file serving.
@@ -173,11 +172,11 @@ EMAIL_PORT = 587
 
 SITE_ID = 1
 
-#django-registration redux settings
+#django-registration settings
 ACCOUNT_ACTIVATION_DAYS = 1# One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
 
-LOGIN_REDIRECT_URL ='/'
+LOGIN_REDIRECT_URL ='MyCalendar:home'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 TIME_FORMAT = 'H:i'
@@ -186,6 +185,12 @@ TIME_INPUT_FORMATS = (
     '%H : %M',        # '17 : 59'
 )
 
+DATE_FORMAT = 'F j Y'
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/TaskList/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}

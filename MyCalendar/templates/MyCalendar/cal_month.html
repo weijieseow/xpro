@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'MyCalendar/style.css' %}" />
     <div class="container-fluid">
 
-        <a href="{% url 'MyCalendar:eventcreate' %}" class="btn btn-success">New Event</a>
+        <a class="ff_btn btn_blue" href="{% url 'MyCalendar:eventcreate' %}">New Event</a>
 
         <div class="col-md-12">
         <table width="100%">
@@ -19,7 +19,7 @@
                   &lt;&lt; <a href="/MyCalendar/calendar/{{PreviousYear}}/{{PreviousMonth}}/" style="color:grey">{{PreviousMonthName}} {{PreviousYear}}</a>
                 </td>
 
-                <td width="20%" align="center"><a href="{% url 'MyCalendar:calendar' %}" style="color:dimgray">Today</a></td>
+                <td width="20%" align="center"><a href="{% url 'MyCalendar:calendar' %}" style="color:grey">Today</a></td>
 
                 <td width="20%" align="right">
                   <a href="/MyCalendar/calendar/{{NextYear}}/{{NextMonth}}/" style="color:grey">{{NextMonthName}} {{NextYear}}</a> &gt;&gt;

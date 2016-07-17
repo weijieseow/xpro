@@ -1,12 +1,12 @@
-{% extends "base.html" %}
+{% extends "MyCalendar/navbar.html" %}
 {% load crispy_forms_tags %}
 {% load i18n %}
 
-{% block content %}
+{% block body %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4 col-md-4">
-                <form method="post" action=".">
+                <form id="change_display_name_form" method="POST">
                   {% csrf_token %}
                   {{ form|crispy }}
 

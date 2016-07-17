@@ -9,16 +9,16 @@
     <title>X-Pro</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="/static/css/wickedpicker.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
-<body>
-    <nav class="navbar navbar-default">
+<div id="nav">
+    <nav id="custom-bootstrap-menu" class="navbar navbar-custom navbar-static-top">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -28,7 +28,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'MyCalendar:tasklist' %}">X-Pro</a>
+          <a class="navbar-brand" href="{% url 'MyCalendar:home' %}">X-Pro</a>
         </div>
 
 
@@ -43,6 +43,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="{%  url 'MyCalendar:tasklist' %}">Tasks List</a></li>
                         <li><a href="{%  url 'MyCalendar:taskcreate' %}">New Task</a></li>
+                        <li><a href="{%  url 'MyCalendar:projectcreate' %}">New Project</a></li>
                     </ul>
                 </li>
 
@@ -57,29 +58,37 @@
 
             </ul>
 
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user">{{ user.userprofile.display_name }}</span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
 
+                            <li><a href="{% url 'changedisplayname' %}">Change Display Name</a></li>
+                            <li><a href="{% url 'changeemail' %}">Change Email Address</a></li>
+                            <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                            <li><a href="{% url 'MyCalendar:logout' %}">Logout</a></li>
 
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user">{{ user.username }}</span><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'MyCalendar:logout' %}">logout</a></li>
-                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+    </div>
 {% block body %}
 {% endblock %}
-
+<body>
 <!-- Latest compiled and minified JavaScript -->
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/wickedpicker.js"></script>
+<script>
+    $('#nav').affix({
+        offset: {
+            top: $('header').height()
+        }
+    })
+</script>
 </body>
 </html>

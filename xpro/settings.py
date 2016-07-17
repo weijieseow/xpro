@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     #own apps
     'MyCalendar.apps.MycalendarConfig',
+    'hidden_settings',
 ]
 
 MIDDLEWARE_CLASSES = [

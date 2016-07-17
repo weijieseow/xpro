@@ -170,5 +170,5 @@ ENV/
 staticfiles
 .env
 *.sqlite3
-hidden_settings.py
+hidden_settings
 

@@ -176,7 +176,6 @@ SERVER_EMAIL = os.environ['SERVER_EMAIL']
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
 
-SITE_ID = 1
 
 #django-registration settings
 ACCOUNT_ACTIVATION_DAYS = 1# One-week activation window; you may, of course, use a different value.

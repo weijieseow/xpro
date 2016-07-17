@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     #third party apps
     'crispy_forms',
     #own apps
+    'hidden_settings',
     'MyCalendar.apps.MycalendarConfig',
-
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -149,6 +149,7 @@ USE_TZ = True
 # Update database configuration with $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

@@ -199,7 +199,7 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'
 SITE_ID = 1
 
 a = os.environ['a']
- b = os.environ['b']
+b = os.environ['b']
 c = os.environ['c']
 d = os.environ['d']
 

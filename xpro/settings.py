@@ -190,3 +190,7 @@ DATE_FORMAT = 'F j Y'
 DATE_INPUT_FORMATS = ('%d-%m-%Y')
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/MyCalendar/home/'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}

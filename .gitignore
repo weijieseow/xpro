@@ -170,5 +170,4 @@ ENV/
 staticfiles
 .env
 *.sqlite3
-hidden_settings
 

@@ -2,8 +2,21 @@
 
 {% block body %}
     <div class="container-fluid">
-        <span class="col-xs-5-offset-3 col-sm-offset-3 col-md-offset-3">
-            <img src="/static/images/tree1.png" alt="tree1" width="200" height="300" />
-        </span>
+        {% if total_overdue == 0 %}
+            <img class="img-fluid center-block" src="/static/images/tree1.png" alt="tree1" width='30%' height='30%' />
+
+        {% elif total_overdue > 0 and total_overdue <= 2 %}
+            <img class="img-fluid center-block" src="/static/images/tree2.png" alt="tree2" width='30%' height='30%' />
+
+        {% elif total_overdue > 2 and total_overdue <= 4 %}
+            <img class="img-fluid center-block" src="/static/images/tree3.png" alt="tree3" width='30%' height='30%' />
+
+        {% elif total_overdue > 4 and total_overdue <= 6 %}
+            <img class="img-fluid center-block" src="/static/images/tree4.png" alt="tree4" width='30%' height='30%' />
+
+        {% elif total_overdue > 6 %}
+            <img class="img-fluid center-block" src="/static/images/tree5.png" alt="tree5" width='30%' height='30%' />
+
+        {% endif %}
     </div>
 {% endblock %}

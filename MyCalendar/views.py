@@ -19,6 +19,28 @@ from django.http import Http404, HttpResponseRedirect
 
 
 @login_required
+def homeView(request):
+    user = request.user
+    user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
+
+    overdue_tasks = []
+    overdue_projects = []
+
+    for task in user_tasks:
+        if task.task_date < date.today():
+            overdue_tasks.append(task)
+
+    for project in user_projects:
+        if project.project_date < date.today():
+            overdue_projects.append(project)
+
+    total_overdue = len(overdue_tasks) + len(overdue_projects)
+
+    return render(request, 'MyCalendar/home.html', {'total_overdue': total_overdue})
+
+
+@login_required
 def eventCreateView(request):
     profile = request.user.userprofile
     if request.method == "POST":

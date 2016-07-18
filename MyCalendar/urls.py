@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', views.calendarView, name='calendar'),
 
     # /MyCalendar/home
-    url(r'^home/$', TemplateView.as_view(template_name='MyCalendar/home.html'), name='home'),
+    url(r'^home/$', views.homeView, name='home'),
 
     # /MyCalendar/calendar
     url(r'^calendar/([0-9]{4})/([0-9]+)/$', views.calendarView, name='calendar'),

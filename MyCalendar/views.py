@@ -33,9 +33,11 @@ def homeView(request):
     user = request.user
     user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
     user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
+    user_project_tasks = ProjectTask.objects.all().order_by('project_task_date')
 
     overdue_tasks = []
     overdue_projects = []
+    overdue_project_tasks = []
 
     for task in user_tasks:
         if task.task_date < date.today():
@@ -45,7 +47,11 @@ def homeView(request):
         if project.project_date < date.today():
             overdue_projects.append(project)
 
-    total_overdue = len(overdue_tasks) + len(overdue_projects)
+    for project_task in user_project_tasks:
+         if project_task.project_task_date < date.today():
+                overdue_project_tasks.append(project_task)
+
+    total_overdue = len(overdue_tasks) + len(overdue_projects) + len(overdue_project_tasks)
 
     return render(request, 'MyCalendar/home.html', {'total_overdue': total_overdue})
 

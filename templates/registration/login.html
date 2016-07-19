@@ -21,7 +21,7 @@
                   {{ form|crispy }}
 
                   <input class="ff_btn btn_blue" type="submit" value="{% trans 'Log in' %}"/>
-                  <input type="hidden" name="next" value="{% url 'MyCalendar:tasklist' %}"/>
+                  <input type="hidden" name="next" value="{% url 'MyCalendar:home' %}"/>
                 </form>
                 <br>
                 <p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>

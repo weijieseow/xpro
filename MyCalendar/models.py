@@ -41,6 +41,7 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=255)
     task_date = models.DateField(null=True, default=date.today())
+    completed = models.BooleanField(default=False)
     description = models.TextField(blank=True)
 
     def __str__(self):

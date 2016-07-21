@@ -235,6 +235,17 @@ class taskDeleteView(edit.DeleteView):
 
         return context
 
+@login_required
+def taskCompleteView(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = True
+    task.save()
+    return redirect('MyCalendar:tasklist')
+
+
+
+
+
 
 @login_required
 def projectCreateView(request):

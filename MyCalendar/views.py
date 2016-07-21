@@ -162,6 +162,14 @@ def taskListView(request):
     number_of_current_projects = len(current_projects)
     number_of_overdue_projects = len(overdue_projects)
 
+    #to get the number of overdue project tasks
+    user_project_tasks = ProjectTask.objects.all().order_by('project_task_date')
+    overdue_project_tasks = []
+    for project_task in user_project_tasks:
+        if project_task.project_task_date < date.today():
+            overdue_project_tasks.append(project_task)
+    number_of_overdue_project_tasks = len(overdue_project_tasks)
+
     context = {'current_tasks': current_tasks,
                'number_of_current_tasks': number_of_current_tasks,
                'overdue_tasks': overdue_tasks,
@@ -171,7 +179,8 @@ def taskListView(request):
                'number_of_current_projects': number_of_current_projects,
                'overdue_projects': overdue_projects,
                'number_of_overdue_projects': number_of_overdue_projects,
-               'profile': profile
+               'profile': profile,
+               'number_of_overdue_project_tasks': number_of_overdue_project_tasks
                }
 
     return render(request, 'MyCalendar/TasksView.html', context)
@@ -366,6 +375,7 @@ class projectTaskUpdateView(edit.UpdateView):
         # Call the base implementation first to get a context
         context = super(projectTaskUpdateView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
+        context['project_id'] = self.get_object().project.pk
         context['profile'] = self.request.user.userprofile
 
         return context

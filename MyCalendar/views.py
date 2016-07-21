@@ -152,9 +152,6 @@ def taskListView(request):
             overdue_projects.append(project)
 
 
-
-
-
     date_today = date.today()
     number_of_current_tasks = len(current_tasks)
     number_of_overdue_tasks = len(overdue_tasks)
@@ -253,6 +250,7 @@ def projectCreateView(request):
             project_without_user = form.save(commit=False)
             project_without_user.user = request.user
             project = form.save()
+
             return redirect('MyCalendar:project_tasklist', project.pk)
 
     else:

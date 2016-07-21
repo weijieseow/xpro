@@ -3,12 +3,19 @@
 {% load i18n %}
 
 {% block content %}
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="253040779650-ld74d9equhrscdgmfkctq51lfm5nkv47.apps.googleusercontent.com">
+
     <div class="container-fluid">
         <div id="div-border">
-            <h2 id="center-text" class="lead"><strong>X-Pro is a simple to use task manager to prevent procrastination.</strong></h2>
-            <div class="col-xs-offset-4 col-sm-offset-4 col-md-offset-5">
-                <a class="ff_btn btn_blue" href="{% url 'auth_login' %}">Login</a>
-                <a class="ff_btn btn_blue" href="{% url 'registration_register' %}">Register</a>
+            <div id="center-text">
+                <h1 class="lead"><strong>X-Pro is a simple to use task manager to prevent procrastination.</strong></h1>
+                <br>
+                <a class="btn btn-dropbox" href="{% url 'auth_login' %}">Email</a>
+                <a class="btn btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
+                <a class="btn btn-facebook" href="{% url 'social:begin' 'facebook' %}">Facebook</a>
+                <span class="hr-sect">or</span>
+                <a class="btn btn-dropbox" href="{% url 'registration_register' %}">Register</a>
             </div>
         </div>
 

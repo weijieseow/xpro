@@ -61,7 +61,7 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user">{{ user.userprofile.display_name }}</span><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ user.userprofile.display_name }}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
 
 
@@ -70,9 +70,6 @@
                             <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
                             <li><a href="{% url 'MyCalendar:logout' %}">Logout</a></li>
 
-<body background="/static/images/background.jpg">
-
-
                         </ul>
                     </li>
                 </ul>
@@ -80,9 +77,11 @@
           </div><!-- /.container-fluid -->
         </nav>
     </div>
+
+<body background="/static/images/background.jpg">
 {% block body %}
 {% endblock %}
-<body>
+</body>
 <!-- Latest compiled and minified JavaScript -->
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -97,5 +96,4 @@
     })
 </script>
 
-</body>
 </html>

@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^event/(?P<pk>[0-9]+)/delete/$', views.eventDeleteView.as_view(), name="eventdelete"),
 
     # logout
-    url(r'^logout/$', auth_views.logout_then_login, name='logout'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
 
     # /MyCalendar/EventCreate
     url(r'^EventCreate/$', views.eventCreateView, name='eventcreate'),
@@ -63,7 +63,7 @@ urlpatterns = [
     # /MyCalendar/TaskList/project/#pk/uncomplete
     url(r'^TaskList/project/(?P<pk>[0-9]+)/uncomplete/$', views.projectUncompleteView, name="projectuncomplete"),
 
-    # /MyCalendar/TaskList/project#pk
+    # /MyCalendar/TaskList/project/#pk
     url(r'^TaskList/project/(?P<project_id>[0-9]+)/$', views.projectTaskListView, name="project_tasklist"),
 
     # /MyCalendar/TaskList/project/ProjectTaskCreate

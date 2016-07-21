@@ -45,7 +45,6 @@
                                 </div>
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
-                                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -66,13 +65,12 @@
                              <div id="project{{ project.pk }}" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <pre style="background-color: white">
-    {{ project.description }}
+{{ project.description }}
                                     </pre>
                                 </div>
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                                 </div>
                             </div>
                         </div>
@@ -114,12 +112,11 @@
                         <div id="{{ task.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
-    {{ task.description }}
+{{ task.description }}
                                 </pre>
                             </div>
                             <div class="panel-footer">
                                 <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
-                                <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                             </div>
                         </div>
                     </div>
@@ -140,13 +137,12 @@
                          <div id="project{{ project.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
-    {{ project.description }}
+{{ project.description }}
                                 </pre>
                             </div>
                             <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                             </div>
                         </div>
                     </div>

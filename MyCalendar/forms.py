@@ -41,7 +41,7 @@ class EventCreateForm(forms.ModelForm):
 
 class TaskCreateForm(forms.ModelForm):
 
-    task_date = forms.DateField(widget=DateInput())
+    task_date = forms.DateField(widget=DateInput(), label='Deadline')
 
     class Meta:
         model = Task
@@ -51,7 +51,7 @@ class TaskCreateForm(forms.ModelForm):
 
 class ProjectCreateForm(forms.ModelForm):
 
-    project_date = forms.DateField(widget=DateInput())
+    project_date = forms.DateField(widget=DateInput(), label='Deadline')
 
     class Meta:
         model = Project
@@ -61,7 +61,7 @@ class ProjectCreateForm(forms.ModelForm):
 
 class ProjectTaskCreateForm(forms.ModelForm):
 
-    project_task_date = forms.DateField(widget=DateInput())
+    project_task_date = forms.DateField(widget=DateInput(), label='Deadline')
 
     class Meta:
         model = ProjectTask

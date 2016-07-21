@@ -18,9 +18,9 @@ from django.http import Http404
 @login_required
 def homeView(request):
     user = request.user
-    user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
-    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
-    user_project_tasks = ProjectTask.objects.all().order_by('project_task_date')
+    user_tasks = Task.objects.filter(user__exact=user, completed__exact=False).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user, completed__exact=False).order_by('project_date')
+    user_project_tasks = ProjectTask.objects.filter(completed__exact=False).order_by('project_task_date')
 
     overdue_tasks = []
     overdue_projects = []

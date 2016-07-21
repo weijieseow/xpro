@@ -1,7 +1,17 @@
 from django.views.generic import edit
+
+from .models import Event, Task, Project, ProjectTask, UserProfile
+from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
+#from django.contrib.auth.models import User
+from .models import Event, Task, Project, ProjectTask
+from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
+from django.contrib.auth.models import User
+
+
 from .models import Event, Task, Project, ProjectTask
 from .forms import  EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
 from django.contrib.auth.models import User
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
@@ -233,6 +243,17 @@ class taskDeleteView(edit.DeleteView):
         context['profile'] = self.request.user.userprofile
 
         return context
+
+@login_required
+def taskCompleteView(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = True
+    task.save()
+    return redirect('MyCalendar:tasklist')
+
+
+
+
 
 
 @login_required

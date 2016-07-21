@@ -58,35 +58,43 @@
 
             </ul>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-user">{{ user.userprofile.display_name }}</span><span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user">{{ user.userprofile.display_name }}</span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
 
-                        <li><a href="{% url 'changedisplayname' %}">Change Display Name</a></li>
-                        <li><a href="{% url 'changeemail' %}">Change Email Address</a></li>
-                        <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
-                        <li><a href="{% url 'MyCalendar:logout' %}">Logout</a></li>
 
-                    </ul>
-                </li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-</div>
+                            <li><a href="{% url 'changedisplayname' %}">Change Display Name</a></li>
+                            <li><a href="{% url 'changeemail' %}">Change Email Address</a></li>
+                            <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
+                            <li><a href="{% url 'MyCalendar:logout' %}">Logout</a></li>
 
 <body background="/static/images/background.jpg">
 
+
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+    </div>
 {% block body %}
 {% endblock %}
-
+<body>
 <!-- Latest compiled and minified JavaScript -->
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/wickedpicker.js"></script>
+
+<script>
+    $('#nav').affix({
+        offset: {
+            top: $('header').height()
+        }
+    })
+</script>
+
 </body>
 </html>

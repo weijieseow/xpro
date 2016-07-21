@@ -1,17 +1,6 @@
 from django.views.generic import edit
-
-from .models import Event, Task, Project, ProjectTask, UserProfile
-from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-#from django.contrib.auth.models import User
 from .models import Event, Task, Project, ProjectTask
 from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-from django.contrib.auth.models import User
-
-
-from .models import Event, Task, Project, ProjectTask
-from .forms import  EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-from django.contrib.auth.models import User
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
@@ -19,12 +8,10 @@ from datetime import date, datetime, timedelta
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 
 
 
@@ -131,12 +118,19 @@ class eventDeleteView(edit.DeleteView):
 
         return context
 
+@login_required
+def completedView(request):
+    user = request.user
+    tasks = Task.objects.filter(user__exact=user, completed__exact=True).order_by('completed_date')
+    projects = Project.objects.filter(user__exact=user, completed__exact=True).order_by('completed_date')
+    return render(request, 'MyCalendar/completed.html', {'tasks': tasks, 'projects': projects})
+
 
 @login_required
 def taskListView(request):
     user = request.user
-    user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
-    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
+    user_tasks = Task.objects.filter(user__exact=user, completed__exact=False).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user, completed__exact=False).order_by('project_date')
     profile = user.userprofile
 
     overdue_tasks = []
@@ -151,10 +145,29 @@ def taskListView(request):
             overdue_tasks.append(task)
 
     for project in user_projects:
+        project_tasks = ProjectTask.objects.filter(project__exact=project, completed__exact=False)
+        project_tasks_count = project_tasks.count()
+        project.total_project_tasks = project_tasks_count
+
+        overdue_project_tasks_count = 0
+        current_project_tasks_count = 0
+        for ptask in project_tasks:
+            if ptask.project_task_date >= date.today():
+                current_project_tasks_count += 1
+            else:
+                overdue_project_tasks_count += 1
+
+        project.overdue_project_tasks = overdue_project_tasks_count
+        project.current_project_tasks = current_project_tasks_count
+
+        project.save()
+
         if project.project_date >= date.today():
             current_projects.append(project)
         else:
             overdue_projects.append(project)
+
+
 
     date_today = date.today()
     number_of_current_tasks = len(current_tasks)
@@ -248,11 +261,17 @@ class taskDeleteView(edit.DeleteView):
 def taskCompleteView(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed = True
+    task.completed_date = date.today()
     task.save()
     return redirect('MyCalendar:tasklist')
 
-
-
+@login_required
+def taskUncompleteView(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = False
+    task.completed_date = None
+    task.save()
+    return redirect('MyCalendar:completed')
 
 
 
@@ -295,15 +314,18 @@ def projectTaskListView(request, project_id):
 
     overdue_project_tasks = []
     current_project_tasks = []
+    completed_project_task = []
 
     if request.user != current_project.user:
         raise Http404('Project does not exist.')
 
     for task in project_tasks:
-        if task.project_task_date >= date.today():
+        if (task.project_task_date >= date.today()) and (task.completed is False):
             current_project_tasks.append(task)
-        else:
+        elif (task.project_task_date < date.today()) and (task.completed is False):
             overdue_project_tasks.append(task)
+        else:
+            completed_project_task.append(task)
 
     date_today = date.today()
     number_of_current_tasks = len(current_project_tasks)
@@ -315,7 +337,8 @@ def projectTaskListView(request, project_id):
                'number_of_overdue_tasks': number_of_overdue_tasks,
                'date_today': date_today,
                'project_id': project_id,
-               'profile': profile
+               'profile': profile,
+               'completed_project_task': completed_project_task,
                }
 
     return render(request, 'MyCalendar/ProjectTasksView.html', context)
@@ -335,6 +358,43 @@ class projectDeleteView(edit.DeleteView):
         context['profile'] = self.request.user.userprofile
 
         return context
+
+@login_required
+def projectCompleteView(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+
+    # i want to set a way to test if all the project tasks have been completed before allowing project to be completed
+    ptasks = ProjectTask.objects.filter(project__exact=project)
+    #for ptask in project_tasks:
+     #   if ptask.completed == False:
+
+    #since above feature not done, for now, set project as well as its project tasks to all be completed
+
+    project.completed = True
+    project.completed_date = date.today()
+    project.save()
+
+    for ptask in ptasks:
+        ptask.completed = True
+        ptask.completed_date = date.today()
+        ptask.save()
+
+    return redirect('MyCalendar:tasklist')
+
+@login_required
+def projectUncompleteView(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.completed = False
+    project.completed_date = None
+    project.save()
+
+    ptasks = ProjectTask.objects.filter(project__exact=project)
+    for ptask in ptasks:
+        ptask.completed = False
+        ptask.completed_date = None
+        ptask.save()
+
+    return redirect('MyCalendar:completed')
 
 
 @login_required
@@ -397,6 +457,21 @@ class projectTaskDeleteView(edit.DeleteView):
         context['profile'] = self.request.user.userprofile
         return context
 
+@login_required
+def projectTaskCompleteView(request, project_id, pk):
+    ptask = get_object_or_404(ProjectTask, pk=pk)
+    ptask.completed = True
+    ptask.completed_date = date.today()
+    ptask.save()
+    return redirect('MyCalendar:project_tasklist', project_id)
+
+@login_required
+def projectTaskUncompleteView(request, project_id, pk):
+    ptask = get_object_or_404(ProjectTask, pk=pk)
+    ptask.completed = False
+    ptask.completed_date = None
+    ptask.save()
+    return redirect('MyCalendar:project_tasklist', project_id)
 
 
 

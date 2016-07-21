@@ -45,10 +45,8 @@
                                 </div>
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
-
                                     <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                                      <a href="{% url 'MyCalendar:taskcomplete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
-
                                 </div>
                             </div>
                         </div>
@@ -61,8 +59,10 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                        <span class="glyphicon glyphicon-book"></span>
+                                        <span class="glyphicon glyphicon-book"></span>&nbsp
                                         {{ project }} - {{ project.project_date }}
+                                        -- Total: {{ project.total_project_tasks }} - Overdue: {{ project.overdue_project_tasks }}
+                                        - Current: {{ project.current_project_tasks }}
                                     </a>
                                 </h4>
                               </div>
@@ -76,6 +76,7 @@
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
+                                    <a href="{% url 'MyCalendar:projectcomplete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                                 </div>
                             </div>
                         </div>
@@ -122,6 +123,7 @@
                             </div>
                             <div class="panel-footer">
                                 <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                <a href="{% url 'MyCalendar:taskcomplete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                             </div>
                         </div>
                     </div>
@@ -134,8 +136,11 @@
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                    <span class="glyphicon glyphicon-book"></span>
-                                    &nbsp{{ project }} - {{ project.project_date }}
+                                    <span class="glyphicon glyphicon-book"></span>&nbsp
+                                    {{ project }} - {{ project.project_date }}
+                                    -- Total: {{ project.total_project_tasks }} - Overdue: {{ project.overdue_project_tasks }}
+                                    - Current: {{ project.current_project_tasks }}
+
                                 </a>
                             </h4>
                           </div>
@@ -143,12 +148,13 @@
                          <div id="project{{ project.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
-{{ project.description }}
+                                    {{ project.description }}
                                 </pre>
                             </div>
                             <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
+                                    <a href="{% url 'MyCalendar:projectcomplete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                             </div>
                         </div>
                     </div>

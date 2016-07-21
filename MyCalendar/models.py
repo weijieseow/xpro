@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.db.models.signals import post_save
 from django.db import models
-from datetime import date, timedelta
+from datetime import date
 from django.contrib.auth.models import User
 
 
@@ -18,6 +18,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 
 post_save.connect(create_user_profile, sender=User)
+
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -42,6 +43,7 @@ class Task(models.Model):
     task_name = models.CharField(max_length=255)
     task_date = models.DateField(null=True, default=date.today())
     completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -56,6 +58,12 @@ class Project(models.Model):
     project_name = models.CharField(max_length=255)
     project_date = models.DateField(null=True, default=date.today())
     description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True)
+
+    total_project_tasks = models.IntegerField(default=0)
+    overdue_project_tasks = models.IntegerField(default=0)
+    current_project_tasks = models.IntegerField(default=0)
 
     def __str__(self):
         return self.project_name
@@ -69,6 +77,8 @@ class ProjectTask(models.Model):
     project_task_name = models.CharField(max_length=255)
     project_task_date = models.DateField(null=True, default=date.today())
     description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.project_task_name

@@ -36,6 +36,9 @@
                             </div>
                             <div class="panel-footer">
                                 <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                <a href="{% url 'MyCalendar:project_taskcomplete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
+
                             </div>
                         </div>
                     </div>
@@ -73,6 +76,9 @@
                         </div>
                         <div class="panel-footer">
                             <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                            <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                            <a href="{% url 'MyCalendar:project_taskcomplete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
+
                         </div>
                     </div>
                 </div>

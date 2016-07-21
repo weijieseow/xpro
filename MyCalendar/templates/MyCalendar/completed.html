@@ -3,12 +3,17 @@
 {% block body %}
 
     <div class="container-fluid">
+        <h1>Completed:</h1>
         {% if tasks %}
                 <ol>
                 {% for task in tasks %}
                     <br>
                     <div class="panel-group">
+
                         <div class="panel panel-primary">
+
+                        <div class="panel panel-default">
+
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }}</a>
@@ -39,7 +44,11 @@
                 {% for project in projects %}
                     <br>
                     <div class="panel-group">
+
                         <div class="panel panel-primary">
+
+                        <div class="panel panel-default">
+
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#project{{ project.pk }}">{{ project }}</a>

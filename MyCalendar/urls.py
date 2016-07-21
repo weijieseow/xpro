@@ -73,12 +73,12 @@ urlpatterns = [
     url(r'^TaskList/project/(?P<project_id>[0-9]+)/(?P<pk>[0-9]+)/update/$', views.projectTaskUpdateView.as_view(), name="project_taskupdate"),
 
     # /MyCalendar/TaskList/project/ptask/#pk/delete
-    url(r'^TaskList/project/(?P<proj>[0-9]+)/(?P<pk>[0-9]+)/delete/$', views.projectTaskDeleteView.as_view(), name="project_taskdelete"),
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/(?P<pk>[0-9]+)/delete/$', views.projectTaskDeleteView.as_view(), name="project_taskdelete"),
 
     # /MyCalendar/TaskList/project/ptask/#pk/complete
-    url(r'^TaskList/project/(?P<proj>[0-9]+)/(?P<pk>[0-9]+)/complete/$', views.projectTaskCompleteView, name="project_taskcomplete"),
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/(?P<pk>[0-9]+)/complete/$', views.projectTaskCompleteView, name="project_taskcomplete"),
 
     # /MyCalendar/TaskList/project/ptask/#pk/uncomplete
-    url(r'^TaskList/project/(?P<proj>[0-9]+)/(?P<pk>[0-9]+)/uncomplete/$', views.projectTaskUncompleteView, name="project_taskuncomplete"),
+    url(r'^TaskList/project/(?P<project_id>[0-9]+)/(?P<pk>[0-9]+)/uncomplete/$', views.projectTaskUncompleteView, name="project_taskuncomplete"),
 
     ]

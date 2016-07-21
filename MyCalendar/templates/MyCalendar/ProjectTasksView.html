@@ -6,29 +6,75 @@
 
         <a href="{% url 'MyCalendar:project_taskcreate' project_id %}" class="ff_btn btn_blue">New Project Task</a>
 
-    <div class="container-fluid">
-        {% if overdue_project_tasks %}
-            <h1> Overdue -
-                {% if number_of_overdue_tasks > 1 %}
-                    {{ number_of_overdue_tasks }} project tasks
-                {% elif number_of_overdue_tasks <= 1 %}
-                    {{ number_of_overdue_tasks }} project task
+        {% if not current_project_tasks %}
+            {% if not overdue_project_tasks %}
+            <h1>You don't have any outstanding project tasks! Hooray!</h1>
+            {% endif %}
+        {% endif %}
+
+        <div class="container-fluid">
+            {% if overdue_project_tasks %}
+                <h1> Overdue -
+                    {% if number_of_overdue_tasks > 1 %}
+                        {{ number_of_overdue_tasks }} project tasks
+                    {% elif number_of_overdue_tasks <= 1 %}
+                        {{ number_of_overdue_tasks }} project task
+                    {% endif %}
+
+                </h1>
+                <ol>
+
+                    {% for task in overdue_project_tasks %}
+                        <br>
+                        <div class="panel-group">
+                            <div class="panel panel-danger">
+                              <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }} - {{ task.project_task_date }}</a>
+                                </h4>
+                              </div>
+
+                             <div id="task{{ task.pk }}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <pre style="background-color: white">
+{{ task.description }}
+                                    </pre>
+                                </div>
+                                <div class="panel-footer">
+                                    <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
+                                    <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:project_taskcomplete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ol>
+
+            {% endif %}
+        </div>
+
+        <div class="container-fluid">
+            {% if current_project_tasks %}
+                <h1> Current -
+                {% if number_of_current_tasks > 1 %}
+                    {{ number_of_current_tasks }} project tasks
+                {% elif number_of_current_tasks <= 1 %}
+                    {{ number_of_current_tasks }} project task
                 {% endif %}
+                </h1>
 
-            </h1>
             <ol>
-
-                {% for task in overdue_project_tasks %}
+                {% for task in current_project_tasks %}
                     <br>
                     <div class="panel-group">
-                        <div class="panel panel-danger">
+                        <div class="panel panel-info">
                           <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }} - {{ task.project_task_date }}</a>
+                                <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }} - {{ task.project_task_date }}</a>
                             </h4>
                           </div>
-
-                         <div id="task{{ task.pk }}" class="panel-collapse collapse">
+                        <div id="{{ task.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
 {{ task.description }}
@@ -45,54 +91,43 @@
                 {% endfor %}
             </ol>
 
-        {% endif %}
-    </div>
-
-    <div class="container-fluid">
-        {% if current_project_tasks %}
-            <h1> Current -
-            {% if number_of_current_tasks > 1 %}
-                {{ number_of_current_tasks }} project tasks
-            {% elif number_of_current_tasks <= 1 %}
-                {{ number_of_current_tasks }} project task
             {% endif %}
-            </h1>
+        </div>
 
-        <ol>
-            {% for task in current_project_tasks %}
-                <br>
-                <div class="panel-group">
-                    <div class="panel panel-info">
-                      <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#{{ task.pk }}">{{ task }} - {{ task.project_task_date }}</a>
-                        </h4>
-                      </div>
-                    <div id="{{ task.pk }}" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <pre style="background-color: white">
+        <div class="container-fluid">
+
+            {% if completed_project_task %}
+                <h1>Completed:</h1>
+                    <ol>
+                    {% for task in completed_project_task %}
+                        <br>
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }}</a>
+                                </h4>
+                              </div>
+
+                             <div id="task{{ task.pk }}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <pre style="background-color: white">
 {{ task.description }}
-                            </pre>
+                                    </pre>
+                                </div>
+                                 <div class="panel-footer">
+                                        <a href="{% url 'MyCalendar:project_taskuncomplete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Restore</span></a>
+                                 </div>
+
+                            </div>
                         </div>
-                        <div class="panel-footer">
-                            <a href="{% url 'MyCalendar:project_taskupdate' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
-                            <a href="{% url 'MyCalendar:project_taskdelete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
-                            <a href="{% url 'MyCalendar:project_taskcomplete' project_id task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
+                    {% endfor %}
+                </ol>
 
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </ol>
-
-        {% endif %}
-    </div>
-
-        {% if not current_project_tasks %}
-            {% if not overdue_project_tasks %}
-            <h1>You don't have any outstanding project tasks! Hooray!</h1>
             {% endif %}
-        {% endif %}
+        </div>
+
+
     </div>
 
 

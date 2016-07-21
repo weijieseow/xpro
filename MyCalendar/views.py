@@ -18,9 +18,9 @@ from django.http import Http404
 @login_required
 def homeView(request):
     user = request.user
-    user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
-    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
-    user_project_tasks = ProjectTask.objects.all().order_by('project_task_date')
+    user_tasks = Task.objects.filter(user__exact=user, completed__exact=False).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user, completed__exact=False).order_by('project_date')
+    user_project_tasks = ProjectTask.objects.filter(completed__exact=False).order_by('project_task_date')
 
     overdue_tasks = []
     overdue_projects = []
@@ -283,15 +283,18 @@ def projectTaskListView(request, project_id):
 
     overdue_project_tasks = []
     current_project_tasks = []
+    completed_project_task = []
 
     if request.user != current_project.user:
         raise Http404('Project does not exist.')
 
     for task in project_tasks:
-        if task.project_task_date >= date.today():
+        if (task.project_task_date >= date.today()) and (task.completed is False):
             current_project_tasks.append(task)
-        else:
+        elif (task.project_task_date < date.today()) and (task.completed is False):
             overdue_project_tasks.append(task)
+        else:
+            completed_project_task.append(task)
 
     date_today = date.today()
     number_of_current_tasks = len(current_project_tasks)
@@ -303,6 +306,8 @@ def projectTaskListView(request, project_id):
                'number_of_overdue_tasks': number_of_overdue_tasks,
                'date_today': date_today,
                'project_id': project_id,
+               'completed_project_task': completed_project_task,
+
                }
 
     return render(request, 'MyCalendar/ProjectTasksView.html', context)
@@ -398,20 +403,20 @@ class projectTaskDeleteView(edit.DeleteView):
 
 
 @login_required
-def projectTaskCompleteView(request, pk):
+def projectTaskCompleteView(request, project_id, pk):
     ptask = get_object_or_404(ProjectTask, pk=pk)
     ptask.completed = True
     ptask.completed_date = date.today()
     ptask.save()
-    return redirect('MyCalendar:project_tasklist')
+    return redirect('MyCalendar:project_tasklist', project_id)
 
 @login_required
-def projectTaskUncompleteView(request, pk):
+def projectTaskUncompleteView(request, project_id, pk):
     ptask = get_object_or_404(ProjectTask, pk=pk)
     ptask.completed = False
     ptask.completed_date = None
     ptask.save()
-    return redirect('MyCalendar:completed')
+    return redirect('MyCalendar:project_tasklist', project_id)
 
 
 

@@ -39,6 +39,9 @@ urlpatterns = [
     # /MyCalendar/task/#pk/delete
     url(r'^TaskList/task/(?P<pk>[0-9]+)/delete/$', views.taskDeleteView.as_view(), name="taskdelete"),
 
+    # /MyCalendar/task/#pk/complete
+    url(r'^TaskList/task/(?P<pk>[0-9]+)/complete/$', views.taskCompleteView, name="taskcomplete"),
+
     # /MyCalendar/ProjectCreate
     url(r'^TaskList/ProjectCreate/$', views.projectCreateView, name='projectcreate'),
 

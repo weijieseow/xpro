@@ -4,9 +4,15 @@
 
     <div class="container-fluid">
         <div class="col-md--4">
-        <a class="ff_btn btn_blue" href="{% url 'MyCalendar:taskcreate' %}">New Task</a>
-        <a class="ff_btn btn_blue" href="{% url 'MyCalendar:projectcreate' %}">New Project</a>
+            <a class="ff_btn btn_blue" href="{% url 'MyCalendar:taskcreate' %}">New Task</a>
+            <a class="ff_btn btn_blue" href="{% url 'MyCalendar:projectcreate' %}">New Project</a>
         </div>
+        {% if not current_tasks and not current_projects %}
+            {% if not overdue_tasks and not overdue_projects %}
+            <h1>You don't have any outstanding tasks! Hooray!</h1>
+            {% endif %}
+            <hr>
+        {% endif %}
 
         <div class="container-fluid">
             {% if overdue_tasks or overdue_projects %}
@@ -82,13 +88,13 @@
                         </div>
                     {% endfor %}
                 </ol>
-
+                <hr>
             {% endif %}
 
         </div>
 
         <div class="container-fluid">
-            {% if current_tasks or current_projects%}
+            {% if current_tasks or current_projects %}
                 <h2> Current -
                 {% if number_of_current_tasks > 1 %}
                     {{ number_of_current_tasks }} tasks,
@@ -160,15 +166,11 @@
                     </div>
                 {% endfor %}
             </ol>
-
+            <hr>
             {% endif %}
         </div>
 
-            {% if not current_tasks and not current_projects %}
-                {% if not overdue_tasks and not overdue_projects %}
-                <h1>You don't have any outstanding tasks! Hooray!</h1>
-                {% endif %}
-            {% endif %}
+
     </div>
 
 

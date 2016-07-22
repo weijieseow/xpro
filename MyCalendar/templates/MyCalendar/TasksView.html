@@ -16,7 +16,7 @@
 
         <div class="container-fluid">
             {% if overdue_tasks or overdue_projects %}
-                <h2> Overdue -
+                <h1> Overdue -
                     {% if number_of_overdue_tasks > 1 %}
                         {{ number_of_overdue_tasks }} tasks,
                     {% elif number_of_overdue_tasks <= 1 %}
@@ -28,12 +28,12 @@
                     {% elif number_of_overdue_projects <= 1 %}
                         {{ number_of_overdue_projects }} project
                     {% endif %}
-                </h2>
+                </h1>
                 <ol>
 
                     {% for task in overdue_tasks %}
                         <br>
-                        <div class="panel-group">
+                        <div id="my_font" class="panel-group">
                             <div class="panel panel-danger">
                               <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -60,7 +60,7 @@
 
                     {% for project in overdue_projects %}
                         <br>
-                        <div class="panel-group">
+                        <div id="my_font" class="panel-group">
                             <div class="panel panel-danger">
                               <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -95,7 +95,7 @@
 
         <div class="container-fluid">
             {% if current_tasks or current_projects %}
-                <h2> Current -
+                <h1> Current -
                 {% if number_of_current_tasks > 1 %}
                     {{ number_of_current_tasks }} tasks,
                 {% elif number_of_current_tasks <= 1 %}
@@ -107,12 +107,12 @@
                 {% elif number_of_current_projects <= 1 %}
                     {{ number_of_current_projects }} project
                 {% endif %}
-                </h2>
+                </h1>
 
             <ol>
                 {% for task in current_tasks %}
                     <br>
-                    <div class="panel-group">
+                    <div id="my_font" class="panel-group">
                         <div class="panel panel-info">
                           <div class="panel-heading">
                             <h4 class="panel-title">
@@ -137,7 +137,7 @@
 
                 {% for project in current_projects %}
                     <br>
-                    <div class="panel-group">
+                    <div id="my_font" class="panel-group">
                         <div class="panel panel-info">
                           <div class="panel-heading">
                             <h4 class="panel-title">

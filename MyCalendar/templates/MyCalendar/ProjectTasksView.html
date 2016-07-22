@@ -27,7 +27,7 @@
 
                     {% for task in overdue_project_tasks %}
                         <br>
-                        <div class="panel-group">
+                        <div id="my_font" class="panel-group">
                             <div class="panel panel-danger">
                               <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -68,7 +68,7 @@
             <ol>
                 {% for task in current_project_tasks %}
                     <br>
-                    <div class="panel-group">
+                    <div id="my_font" class="panel-group">
                         <div class="panel panel-info">
                           <div class="panel-heading">
                             <h4 class="panel-title">
@@ -102,7 +102,7 @@
             {% if completed_project_task %}
                 <h1>Completed:</h1>
                     <ol>
-                    {% for task in completed_project_task %}
+                    {% for id="my_font" task in completed_project_task %}
                         <br>
                         <div class="panel-group">
                             <div class="panel panel-default">

@@ -71,7 +71,7 @@ a {
   color: #fff;
   cursor: pointer;
   display: inline-block;
-  font-family: Arial,sans-serif;
+  font-family: 'Maven Pro', sans-serif;
   font-size: 12px;
   font-weight: bold;
   line-height: 20px;
@@ -112,17 +112,20 @@ a.ff_btn {
     color: white;
 }
 
+h1 {
+    font-family: 'Slabo 27px', serif;
+}
 /* typography responsive */
 @media screen and (max-width: 568px) {
     h1 {
-        font-size:16px;
+        font-size:20px;
     }
 }
 
 
 @media screen and (min-width : 569px) and (max-width : 1024px)  {
     h1 {
-        font-size:20px
+        font-size:24px
     }
 }
 
@@ -165,4 +168,8 @@ a.ff_btn {
 
 .responsive-width {
     font-size: 1vw;
+}
+
+#my_font {
+    font-family: 'Maven Pro', sans-serif;
 }

@@ -9,38 +9,41 @@
     <div class="container-fluid">
         <div id="div-border">
             <div id="center-text">
-                <h1 class="lead"><strong>X-Pro is a simple to use task manager to prevent procrastination.</strong></h1>
+                <h1>X-Pro is a simple to use task manager to prevent procrastination.</h1>
                 <br>
-                <div id="my_centered_buttons">
-                    <a class="btn btn-sm btn-dropbox" href="{% url 'auth_login' %}">Email</a>&nbsp
-                    <a class="btn btn-sm btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>&nbsp
-                    <a class="btn btn-sm btn-facebook" href="{% url 'social:begin' 'facebook' %}">Facebook</a>
-                </div>
-                <span class="hr-sect">or</span>
-                <div id="my_centered_buttons">
-                    <a id="my_centered_buttons" class="btn btn-sm btn-dropbox" href="{% url 'registration_register' %}">Register</a>
+                <div id="my_font">
+                    <div id="my_centered_buttons">
+                        <a  class="btn btn-sm btn-dropbox" href="{% url 'auth_login' %}">Email</a>&nbsp
+                        <a class="btn btn-sm btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>&nbsp
+                        <a class="btn btn-sm btn-facebook" href="{% url 'social:begin' 'facebook' %}">Facebook</a>
+                    </div>
+                    <span class="hr-sect">or</span>
+                    <div id="my_centered_buttons">
+                        <a id="my_centered_buttons" class="btn btn-sm btn-dropbox" href="{% url 'registration_register' %}">Register</a>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <div id="my_font">
+            <div class="col-sm-4 col-md-4">
+                <img class="center-block" src="/static/images/task.png" alt="task" width='30%' height='30%' />
+                <h1 id="center-text" class="lead">Feature 1: Tasks
+                <br>Set your schedule. Keep track of the work you need to do!</h1>
+            </div>
 
-        <div class="col-sm-4 col-md-4">
-            <img class="center-block" src="/static/images/task.png" alt="task" width='30%' height='30%' />
-            <h1 id="center-text" class="lead">Feature 1: Tasks
-            <br>Set your schedule. Keep track of the work you need to do!</h1>
-        </div>
+            <div class="col-sm-4 col-md-4">
+                <img class="center-block" src="/static/images/project.png" alt="project" width='30%' height='30%' />
+                <h1 id="center-text" class="lead">Feature 2: Projects
+                <br>Break down your assignments into
+                smaller tasks to encourage yourself to make progress!</h1>
+            </div>
 
-        <div class="col-sm-4 col-md-4">
-            <img class="center-block" src="/static/images/project.png" alt="project" width='30%' height='30%' />
-            <h1 id="center-text" class="lead">Feature 2: Projects
-            <br>Break down your assignments into
-            smaller tasks to encourage yourself to make progress!</h1>
-        </div>
-
-        <div <div class="col-sm-4 col-md-4">
-             <img class="center-block" src="/static/images/visualisation.png" alt="visualization" width='30%' height='30%' />
-            <h1 id="center-text" class="lead">Feature 3: Visualization
-            <br>If you keep delaying your work, you will see the consequences!</h1>
+            <div <div class="col-sm-4 col-md-4">
+                 <img class="center-block" src="/static/images/visualisation.png" alt="visualization" width='30%' height='30%' />
+                <h1 id="center-text" class="lead">Feature 3: Visualization
+                <br>If you keep delaying your work, you will see the consequences!</h1>
+            </div>
         </div>
     </div>
 

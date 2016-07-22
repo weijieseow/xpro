@@ -11,11 +11,15 @@
             <div id="center-text">
                 <h1 class="lead"><strong>X-Pro is a simple to use task manager to prevent procrastination.</strong></h1>
                 <br>
-                <a class="btn btn-sm btn-dropbox" href="{% url 'auth_login' %}">Email</a>
-                <a class="btn btn-sm btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
-                <a class="btn btn-sm btn-facebook" href="{% url 'social:begin' 'facebook' %}">Facebook</a>
-                <span class="hr-sect">or</span>
-                <a class="btn btn-sm btn-dropbox" href="{% url 'registration_register' %}">Register</a>
+                <div id="my_centered_buttons">
+                    <a class="btn btn-sm btn-dropbox" href="{% url 'auth_login' %}">Email</a>
+                    <a class="btn btn-sm btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
+                    <a class="btn btn-sm btn-facebook" href="{% url 'social:begin' 'facebook' %}">Facebook</a>
+                </div>
+                    <span class="hr-sect">or</span>
+                <div id="my_centered_buttons">
+                    <a id="my_centered_buttons" class="btn btn-sm btn-dropbox" href="{% url 'registration_register' %}">Register</a>
+                </div>
             </div>
         </div>
 

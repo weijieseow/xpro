@@ -133,8 +133,16 @@ a.ff_btn {
     margin: 50px;
 }
 
+#div-box {
+    width:100px;
+}
+
 #center-text {
     text-align:center;
+}
+#my_centered_buttons {
+    display: flex;
+    justify-content: center;
 }
 
 .hr-sect {

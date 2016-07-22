@@ -119,11 +119,6 @@ a.ff_btn {
     }
 }
 
-@media screen and (max-width: 568px) {
-    h1 {
-        font-size:16px;
-    }
-}
 
 @media screen and (min-width : 569px) and (max-width : 1024px)  {
     h1 {
@@ -158,4 +153,8 @@ a.ff_btn {
 	font-size: 0px;
 	line-height: 0px;
 	margin: 0px 8px;
+}
+
+.responsive-width {
+    font-size: 1vw;
 }

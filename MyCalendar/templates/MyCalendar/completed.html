@@ -3,9 +3,16 @@
 {% block body %}
 
     <div class="container-fluid">
-        <h1>Completed:</h1>
+        {% if not tasks and not projects %}
+            <h1>You have not completed any task or project! Get started now!</h1>
+        {% elif task or projects %}
+            <h1>Completed:</h1>
+        {% endif %}
+    </div>
+
+    <div class="container-fluid">
         {% if tasks %}
-                <ol>
+            <ol>
                 {% for task in tasks %}
                     <br>
                     <div id="my_font" class="panel-group">
@@ -68,12 +75,6 @@
             </ol>
 
         {% endif %}
-    </div>
-
-        {% if not tasks and not projects %}
-            <h1>You have not completed any task or project! Get started now!</h1>
-            {% endif %}
-
     </div>
 
 

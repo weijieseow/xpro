@@ -387,6 +387,14 @@ class projectTaskUpdateView(edit.UpdateView):
         else:
             return self.post(self, request)
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(projectTaskUpdateView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['project_id'] = self.get_object().project.pk
+
+        return context
+
 
 
 
@@ -397,6 +405,14 @@ class projectTaskDeleteView(edit.DeleteView):
 
     def get_success_url(self):
         return reverse('MyCalendar:project_tasklist', kwargs={'project_id': self.object.project.pk})
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(projectTaskDeleteView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        context['project_id'] = self.get_object().project.pk
+
+        return context
 
 
 @login_required

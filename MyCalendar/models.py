@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from django.db.models.signals import post_save
 from django.db import models
-from datetime import date, timedelta
+from datetime import date
 from django.contrib.auth.models import User
 
 
@@ -18,6 +18,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 
 post_save.connect(create_user_profile, sender=User)
+
 
 class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -40,7 +41,9 @@ class Event(models.Model):
 class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=255)
-    task_date = models.DateField(null=True, default=date.today())
+    task_date = models.DateField(null=True, default=date.today(), verbose_name='Deadline')
+    completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True, verbose_name='Date Completed')
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -53,8 +56,16 @@ class Task(models.Model):
 class Project(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     project_name = models.CharField(max_length=255)
-    project_date = models.DateField(null=True, default=date.today())
+    project_date = models.DateField(null=True, default=date.today(), verbose_name='Deadline')
     description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True, verbose_name='Date Completed')
+
+    total_project_tasks = models.IntegerField(default=0)
+    overdue_project_tasks = models.IntegerField(default=0)
+    current_project_tasks = models.IntegerField(default=0)
+
+
 
     def __str__(self):
         return self.project_name
@@ -66,8 +77,10 @@ class Project(models.Model):
 class ProjectTask(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     project_task_name = models.CharField(max_length=255)
-    project_task_date = models.DateField(null=True, default=date.today())
+    project_task_date = models.DateField(null=True, default=date.today(), verbose_name='Deadline')
     description = models.TextField(blank=True)
+    completed = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True, verbose_name='Date Completed')
 
     def __str__(self):
         return self.project_task_name

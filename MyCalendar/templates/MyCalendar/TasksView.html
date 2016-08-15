@@ -1,11 +1,19 @@
 {% extends 'MyCalendar/navbar.html' %}
-{% load l10n %}
 
 {% block body %}
 
-    <div id="div1" class="container-fluid">
-        <a href="{% url 'MyCalendar:taskcreate' %}" class="ff_btn btn_blue">New Task</a>
-        <a href="{% url 'MyCalendar:projectcreate' %}" class="ff_btn btn_blue">New Project</a>
+    <div class="container-fluid">
+        <div class="col-md--4">
+            <a class="ff_btn btn_blue" href="{% url 'MyCalendar:taskcreate' %}">New Task</a>
+            <a class="ff_btn btn_blue" href="{% url 'MyCalendar:projectcreate' %}">New Project</a>
+        </div>
+        {% if not current_tasks and not current_projects %}
+            {% if not overdue_tasks and not overdue_projects %}
+            <h1>You don't have any outstanding tasks! Hooray!</h1>
+            {% endif %}
+            <hr>
+        {% endif %}
+
         <div class="container-fluid">
             {% if overdue_tasks or overdue_projects %}
                 <h2> Overdue -
@@ -30,7 +38,7 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#task{{ task.pk }}">
-                                        <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date|localize }}</span>
+                                        {{ task }} - {{ task.task_date }}
                                     </a>
                                 </h4>
                               </div>
@@ -44,6 +52,7 @@
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                     <a href="{% url 'MyCalendar:taskcomplete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +65,10 @@
                               <div class="panel-heading">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                        <span class="glyphicon glyphicon-education">&nbsp{{ project }} - {{ project.project_date }}</span>
+                                        <span class="glyphicon glyphicon-book"></span>&nbsp
+                                        {{ project }} - {{ project.project_date }}
+                                        -- Total: {{ project.total_project_tasks }} - Overdue: {{ project.overdue_project_tasks }}
+                                        - Current: {{ project.current_project_tasks }}
                                     </a>
                                 </h4>
                               </div>
@@ -64,25 +76,25 @@
                              <div id="project{{ project.pk }}" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     <pre style="background-color: white">
-    {{ project.description }}
+{{ project.description }}
                                     </pre>
                                 </div>
                                 <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:projectcomplete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 </ol>
-
+                <hr>
             {% endif %}
 
         </div>
 
         <div class="container-fluid">
-            {% if current_tasks or current_projects%}
+            {% if current_tasks or current_projects %}
                 <h2> Current -
                 {% if number_of_current_tasks > 1 %}
                     {{ number_of_current_tasks }} tasks,
@@ -105,19 +117,19 @@
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#{{ task.pk }}">
-                                    <span class="glyphicon glyphicon-book">&nbsp{{ task }} - {{ task.task_date }}</span>
+                                    {{ task }} - {{ task.task_date }}
                                 </a>
                             </h4>
                           </div>
                         <div id="{{ task.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
-    {{ task.description }}
+{{ task.description }}
                                 </pre>
                             </div>
                             <div class="panel-footer">
                                 <a href="{% url 'MyCalendar:taskupdate' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
-                                <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                <a href="{% url 'MyCalendar:taskcomplete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                             </div>
                         </div>
                     </div>
@@ -130,7 +142,11 @@
                           <div class="panel-heading">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" href="#project{{ project.pk }}">
-                                    <span class="glyphicon glyphicon-education">&nbsp{{ project }} - {{ project.project_date }}</span>
+                                    <span class="glyphicon glyphicon-book"></span>&nbsp
+                                    {{ project }} - {{ project.project_date }}
+                                    -- Total: {{ project.total_project_tasks }} - Overdue: {{ project.overdue_project_tasks }}
+                                    - Current: {{ project.current_project_tasks }}
+
                                 </a>
                             </h4>
                           </div>
@@ -138,27 +154,23 @@
                          <div id="project{{ project.pk }}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <pre style="background-color: white">
-    {{ project.description }}
+                                    {{ project.description }}
                                 </pre>
                             </div>
                             <div class="panel-footer">
                                     <a href="{% url 'MyCalendar:projectupdate' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Update</span></a>
                                     <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
-                                    <a href="{% url 'MyCalendar:projectdelete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
+                                    <a href="{% url 'MyCalendar:projectcomplete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Done!</span></a>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </ol>
-
+            <hr>
             {% endif %}
         </div>
 
-            {% if not current_tasks and not current_projects %}
-                {% if not overdue_tasks and not overdue_projects %}
-                <h1>You don't have any outstanding tasks! Hooray!</h1>
-                {% endif %}
-            {% endif %}
+
     </div>
 
 

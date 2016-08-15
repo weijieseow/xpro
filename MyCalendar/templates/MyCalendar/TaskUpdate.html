@@ -15,6 +15,7 @@
                     {{ form|crispy }}
 
                     <input type="submit" name="update" class="ff_btn btn_grey" value="Update">
+                    <a href="{% url 'MyCalendar:taskdelete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Delete</span></a>
                 </form>
             </div>
         </div>

@@ -4,16 +4,9 @@
 
 {% block content %}
 
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<meta name="google-signin-client_id" content="253040779650-ld74d9equhrscdgmfkctq51lfm5nkv47.apps.googleusercontent.com">
 
     <div class="container-fluid">
 
-        <a class="btn btn-google" href="{% url 'social:begin' 'google-oauth2' %}">Sign in with Google</a>&nbsp
-        <a class="btn btn-facebook" href="{% url 'social:begin' 'facebook' %}">Sign in with Facebook</a>
-        <br><br>
-        <h4>Or sign in with email:</h4>
-        <br>
         <div class="row">
             <div class="col-xs-8 col-sm-6 col-md-4 col-lg-4">
                 <form method="post" action=".">
@@ -21,7 +14,7 @@
                   {{ form|crispy }}
 
                   <input class="ff_btn btn_blue" type="submit" value="{% trans 'Log in' %}"/>
-                  <input type="hidden" name="next" value="{% url 'MyCalendar:tasklist' %}"/>
+                  <input type="hidden" name="next" value="{% url 'MyCalendar:home' %}"/>
                 </form>
                 <br>
                 <p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>

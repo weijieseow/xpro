@@ -11,9 +11,9 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="/static/css/wickedpicker.css">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/wickedpicker.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
@@ -44,6 +44,7 @@
                         <li><a href="{%  url 'MyCalendar:tasklist' %}">Tasks List</a></li>
                         <li><a href="{%  url 'MyCalendar:taskcreate' %}">New Task</a></li>
                         <li><a href="{%  url 'MyCalendar:projectcreate' %}">New Project</a></li>
+                        <li><a href="{%  url 'MyCalendar:completed' %}">Archive</a></li>
                     </ul>
                 </li>
 
@@ -60,8 +61,9 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user">{{ user.userprofile.display_name }}</span><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>{{ user.userprofile.display_name }}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
+
 
                             <li><a href="{% url 'changedisplayname' %}">Change Display Name</a></li>
                             <li><a href="{% url 'changeemail' %}">Change Email Address</a></li>
@@ -75,14 +77,17 @@
           </div><!-- /.container-fluid -->
         </nav>
     </div>
+
+<body background="/static/images/background.jpg">
 {% block body %}
 {% endblock %}
-<body>
+</body>
 <!-- Latest compiled and minified JavaScript -->
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 <script type="text/javascript" src="/static/js/wickedpicker.js"></script>
+
 <script>
     $('#nav').affix({
         offset: {
@@ -90,5 +95,5 @@
         }
     })
 </script>
-</body>
+
 </html>

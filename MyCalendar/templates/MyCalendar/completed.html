@@ -1,0 +1,82 @@
+{% extends 'MyCalendar/navbar.html' %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <h1>Completed:</h1>
+        {% if tasks %}
+                <ol>
+                {% for task in tasks %}
+                    <br>
+                    <div class="panel-group">
+
+                        <div class="panel panel-default">
+
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#task{{ task.pk }}">{{ task }}</a>
+                            </h4>
+                          </div>
+
+                         <div id="task{{ task.pk }}" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <pre style="background-color: white">
+                                    {{ task.description }}
+                                </pre>
+                            </div>
+                             <div class="panel-footer">
+                                    <a href="{% url 'MyCalendar:taskuncomplete' task.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Restore</span></a>
+                             </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </ol>
+
+        {% endif %}
+    </div>
+
+    <div class="container-fluid">
+        {% if projects %}
+                <ol>
+                {% for project in projects %}
+                    <br>
+                    <div class="panel-group">
+
+                        <div class="panel panel-primary">
+
+                        <div class="panel panel-default">
+
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#project{{ project.pk }}">{{ project }}</a>
+                            </h4>
+                          </div>
+
+                         <div id="project{{ project.pk }}" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <pre style="background-color: white">
+                                    {{ project.description }}
+                                </pre>
+                            </div>
+                             <div class="panel-footer">
+                                    <a href="{% url 'MyCalendar:project_tasklist' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Details</span></a>
+                                    <a href="{% url 'MyCalendar:projectuncomplete' project.pk %}" class="ff_btn btn_grey"><span style="font-size:small">Restore</span></a>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </ol>
+
+        {% endif %}
+    </div>
+
+        {% if not tasks and not projects %}
+            <h1>You have not completed any task or project! Get started now!</h1>
+            {% endif %}
+
+    </div>
+
+
+{% endblock %}

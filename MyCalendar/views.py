@@ -1,17 +1,6 @@
 from django.views.generic import edit
-
-from .models import Event, Task, Project, ProjectTask, UserProfile
-from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-#from django.contrib.auth.models import User
 from .models import Event, Task, Project, ProjectTask
 from .forms import EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-from django.contrib.auth.models import User
-
-
-from .models import Event, Task, Project, ProjectTask
-from .forms import  EventCreateForm, TaskCreateForm, ProjectCreateForm, ProjectTaskCreateForm
-from django.contrib.auth.models import User
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from calendar import HTMLCalendar
@@ -19,18 +8,43 @@ from datetime import date, datetime, timedelta
 from django.utils.timezone import now
 from django.utils.html import conditional_escape as esc
 from calendar import monthrange
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 
 
 
 @login_required
+def homeView(request):
+    user = request.user
+    user_tasks = Task.objects.filter(user__exact=user, completed__exact=False).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user, completed__exact=False).order_by('project_date')
+    user_project_tasks = ProjectTask.objects.filter(completed__exact=False).order_by('project_task_date')
+
+    overdue_tasks = []
+    overdue_projects = []
+    overdue_project_tasks = []
+
+    for task in user_tasks:
+        if task.task_date < date.today():
+            overdue_tasks.append(task)
+
+    for project in user_projects:
+        if project.project_date < date.today():
+            overdue_projects.append(project)
+
+    for project_task in user_project_tasks:
+        if project_task.project_task_date < date.today():
+                overdue_project_tasks.append(project_task)
+
+    total_overdue = len(overdue_tasks) + len(overdue_projects) + len(overdue_project_tasks)
+
+    return render(request, 'MyCalendar/home.html', {'total_overdue': total_overdue})
+
+
+@login_required
 def eventCreateView(request):
-    profile = request.user.userprofile
     if request.method == "POST":
         form = EventCreateForm(data=request.POST)
         if form.is_valid():
@@ -40,7 +54,7 @@ def eventCreateView(request):
                 form = EventCreateForm()
 
                 return render(request, 'MyCalendar/EventCreate.html',
-                              {'form': form, 'end_date': end_date, 'start_date': start_date, 'profile': profile})
+                              {'form': form, 'end_date': end_date, 'start_date': start_date})
 
             elif form.cleaned_data['end_date'] == form.cleaned_data['start_date'] \
                     and form.cleaned_data['end_time'] < form.cleaned_data['start_time']:
@@ -52,7 +66,7 @@ def eventCreateView(request):
 
                 return render(request, 'MyCalendar/EventCreate.html',
                               {'form': form, 'end_time': end_time, 'start_time': start_time,
-                               'end_date': end_date, 'start_date': start_date, 'profile': profile})
+                               'end_date': end_date, 'start_date': start_date})
 
             event_without_user = form.save(commit=False)
             event_without_user.user = request.user
@@ -62,7 +76,7 @@ def eventCreateView(request):
 
     else:
         form = EventCreateForm()
-    return render(request, 'MyCalendar/EventCreate.html', {'form': form, 'profile': profile})
+    return render(request, 'MyCalendar/EventCreate.html', {'form': form})
 
 
 
@@ -79,14 +93,6 @@ class eventUpdateView(edit.UpdateView):
         else:
             return self.post(self, request)
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(eventUpdateView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
-
-        return context
-
 
 @method_decorator(login_required, name='dispatch')
 class eventDeleteView(edit.DeleteView):
@@ -95,21 +101,20 @@ class eventDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:calendar')
 
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(eventDeleteView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
 
-        return context
+@login_required
+def completedView(request):
+    user = request.user
+    tasks = Task.objects.filter(user__exact=user, completed__exact=True).order_by('completed_date')
+    projects = Project.objects.filter(user__exact=user, completed__exact=True).order_by('completed_date')
+    return render(request, 'MyCalendar/completed.html', {'tasks': tasks, 'projects': projects})
 
 
 @login_required
 def taskListView(request):
     user = request.user
-    user_tasks = Task.objects.filter(user__exact=user).order_by('task_date')
-    user_projects = Project.objects.filter(user__exact=user).order_by('project_date')
-    profile = user.userprofile
+    user_tasks = Task.objects.filter(user__exact=user, completed__exact=False).order_by('task_date')
+    user_projects = Project.objects.filter(user__exact=user, completed__exact=False).order_by('project_date')
 
     overdue_tasks = []
     current_tasks = []
@@ -123,16 +128,43 @@ def taskListView(request):
             overdue_tasks.append(task)
 
     for project in user_projects:
+        project_tasks = ProjectTask.objects.filter(project__exact=project, completed__exact=False)
+        project_tasks_count = project_tasks.count()
+        project.total_project_tasks = project_tasks_count
+
+        overdue_project_tasks_count = 0
+        current_project_tasks_count = 0
+
+        for ptask in project_tasks:
+            if ptask.project_task_date >= date.today():
+                current_project_tasks_count += 1
+            else:
+                overdue_project_tasks_count += 1
+
+        project.overdue_project_tasks = overdue_project_tasks_count
+        project.current_project_tasks = current_project_tasks_count
+
+        project.save()
+
         if project.project_date >= date.today():
             current_projects.append(project)
         else:
             overdue_projects.append(project)
+
 
     date_today = date.today()
     number_of_current_tasks = len(current_tasks)
     number_of_overdue_tasks = len(overdue_tasks)
     number_of_current_projects = len(current_projects)
     number_of_overdue_projects = len(overdue_projects)
+
+    #to get the number of overdue project tasks
+    user_project_tasks = ProjectTask.objects.all().order_by('project_task_date')
+    overdue_project_tasks = []
+    for project_task in user_project_tasks:
+        if project_task.project_task_date < date.today():
+            overdue_project_tasks.append(project_task)
+    number_of_overdue_project_tasks = len(overdue_project_tasks)
 
     context = {'current_tasks': current_tasks,
                'number_of_current_tasks': number_of_current_tasks,
@@ -143,7 +175,7 @@ def taskListView(request):
                'number_of_current_projects': number_of_current_projects,
                'overdue_projects': overdue_projects,
                'number_of_overdue_projects': number_of_overdue_projects,
-               'profile': profile
+               'number_of_overdue_project_tasks': number_of_overdue_project_tasks
                }
 
     return render(request, 'MyCalendar/TasksView.html', context)
@@ -152,7 +184,6 @@ def taskListView(request):
 
 @login_required
 def taskCreateView(request):
-    profile = request.user.userprofile
     if request.method == "POST":
         form = TaskCreateForm(data=request.POST)
         if form.is_valid():
@@ -165,7 +196,7 @@ def taskCreateView(request):
     else:
         form = TaskCreateForm()
 
-    return render(request, 'MyCalendar/TaskCreate.html', {'form': form, 'profile': profile})
+    return render(request, 'MyCalendar/TaskCreate.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -183,13 +214,6 @@ class taskUpdateView(edit.UpdateView):
             return self.post(self, request)
 
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(taskUpdateView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
-
-        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -199,31 +223,40 @@ class taskDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(taskDeleteView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
 
-        return context
+@login_required
+def taskCompleteView(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = True
+    task.completed_date = date.today()
+    task.save()
+    return redirect('MyCalendar:tasklist')
+
+@login_required
+def taskUncompleteView(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = False
+    task.completed_date = None
+    task.save()
+    return redirect('MyCalendar:completed')
+
 
 
 @login_required
 def projectCreateView(request):
-    profile = request.user.userprofile
     if request.method == "POST":
         form = ProjectCreateForm(data=request.POST)
         if form.is_valid():
             project_without_user = form.save(commit=False)
             project_without_user.user = request.user
-            form.save()
+            project = form.save()
 
-            return redirect('MyCalendar:tasklist')
+            return redirect('MyCalendar:project_tasklist', project.pk)
 
     else:
         form = ProjectCreateForm()
 
-    return render(request, 'MyCalendar/ProjectCreate.html', {'form': form, 'profile': profile})
+    return render(request, 'MyCalendar/ProjectCreate.html', {'form': form})
 
 @method_decorator(login_required, name='dispatch')
 class projectUpdateView(edit.UpdateView):
@@ -241,21 +274,24 @@ class projectUpdateView(edit.UpdateView):
 
 @login_required
 def projectTaskListView(request, project_id):
-    profile = request.user.userprofile
+
     current_project = Project.objects.get(pk=project_id)
     project_tasks = ProjectTask.objects.filter(project=current_project).order_by('project_task_date')
 
     overdue_project_tasks = []
     current_project_tasks = []
+    completed_project_task = []
 
     if request.user != current_project.user:
         raise Http404('Project does not exist.')
 
     for task in project_tasks:
-        if task.project_task_date >= date.today():
+        if (task.project_task_date >= date.today()) and (task.completed is False):
             current_project_tasks.append(task)
-        else:
+        elif (task.project_task_date < date.today()) and (task.completed is False):
             overdue_project_tasks.append(task)
+        else:
+            completed_project_task.append(task)
 
     date_today = date.today()
     number_of_current_tasks = len(current_project_tasks)
@@ -267,7 +303,8 @@ def projectTaskListView(request, project_id):
                'number_of_overdue_tasks': number_of_overdue_tasks,
                'date_today': date_today,
                'project_id': project_id,
-               'profile': profile
+               'completed_project_task': completed_project_task,
+
                }
 
     return render(request, 'MyCalendar/ProjectTasksView.html', context)
@@ -280,18 +317,46 @@ class projectDeleteView(edit.DeleteView):
     success_url = reverse_lazy('MyCalendar:tasklist')
 
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(projectDeleteView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
+@login_required
+def projectCompleteView(request, pk):
+    project = get_object_or_404(Project, pk=pk)
 
-        return context
+    # i want to set a way to test if all the project tasks have been completed before allowing project to be completed
+    ptasks = ProjectTask.objects.filter(project__exact=project)
+    #for ptask in project_tasks:
+     #   if ptask.completed == False:
+
+    #since above feature not done, for now, set project as well as its project tasks to all be completed
+
+    project.completed = True
+    project.completed_date = date.today()
+    project.save()
+
+    for ptask in ptasks:
+        ptask.completed = True
+        ptask.completed_date = date.today()
+        ptask.save()
+
+    return redirect('MyCalendar:tasklist')
+
+@login_required
+def projectUncompleteView(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.completed = False
+    project.completed_date = None
+    project.save()
+
+    ptasks = ProjectTask.objects.filter(project__exact=project)
+    for ptask in ptasks:
+        ptask.completed = False
+        ptask.completed_date = None
+        ptask.save()
+
+    return redirect('MyCalendar:completed')
 
 
 @login_required
 def projectTaskCreateView(request, project_id):
-    profile = request.user.userprofile
     current_project = Project.objects.get(pk=project_id)
 
     if request.method == "POST":
@@ -306,7 +371,7 @@ def projectTaskCreateView(request, project_id):
     else:
         form = ProjectTaskCreateForm()
 
-    return render(request, 'MyCalendar/ProjectTaskCreate.html', {'form': form, 'profile': profile})
+    return render(request, 'MyCalendar/ProjectTaskCreate.html', {'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -323,13 +388,6 @@ class projectTaskUpdateView(edit.UpdateView):
             return self.post(self, request)
 
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(projectTaskUpdateView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['profile'] = self.request.user.userprofile
-
-        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -340,14 +398,22 @@ class projectTaskDeleteView(edit.DeleteView):
     def get_success_url(self):
         return reverse('MyCalendar:project_tasklist', kwargs={'project_id': self.object.project.pk})
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(projectTaskDeleteView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['project_id'] = self.get_object().project.pk
-        context['profile'] = self.request.user.userprofile
-        return context
 
+@login_required
+def projectTaskCompleteView(request, project_id, pk):
+    ptask = get_object_or_404(ProjectTask, pk=pk)
+    ptask.completed = True
+    ptask.completed_date = date.today()
+    ptask.save()
+    return redirect('MyCalendar:project_tasklist', project_id)
+
+@login_required
+def projectTaskUncompleteView(request, project_id, pk):
+    ptask = get_object_or_404(ProjectTask, pk=pk)
+    ptask.completed = False
+    ptask.completed_date = None
+    ptask.save()
+    return redirect('MyCalendar:project_tasklist', project_id)
 
 
 
@@ -431,7 +497,7 @@ def calendarView(request, year=None, month=None):
     Show calendar of events for specified month and year
     """
     if request.user.is_authenticated():
-        profile = request.user.userprofile
+
         username = request.user.username
     else:
         return redirect('MyCalendar:login')
@@ -476,6 +542,6 @@ def calendarView(request, year=None, month=None):
                                                          'YearBeforeThis' : lYearBeforeThis,
                                                          'YearAfterThis' : lYearAfterThis,
                                                          'username': username,
-                                                         'profile': profile
+
                                                          })
 
